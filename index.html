@@ -7,42 +7,82 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;user-select:none;touch-action:none}
 body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:100vh}
 
-#main-menu{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,rgba(14,13,10,.3) 0%,rgba(8,7,5,.75) 100%);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:28px 24px}
+#main-menu{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,rgba(14,13,10,.3) 0%,rgba(8,7,5,.75) 100%);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:24px 16px}
 #main-menu.off{display:none}
-.m-header{text-align:center;margin-top:8px}
-.m-title{color:#e7e2d0;font-size:32px;font-weight:900;letter-spacing:3px;text-transform:uppercase;text-shadow:0 4px 18px rgba(0,0,0,.9)}
-.m-title .inf{color:#c8a951;font-size:38px;display:inline-block;transform:translateY(2px);margin:0 1px}
-.m-sub{color:#a39e8c;font-size:11px;letter-spacing:2.5px;margin-top:4px;text-transform:uppercase}
+.m-header{text-align:center;margin-top:6px}
+.m-title{color:#e7e2d0;font-size:28px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;text-shadow:0 4px 18px rgba(0,0,0,.9)}
+.m-title .inf{color:#c8a951;font-size:34px;display:inline-block;transform:translateY(2px);margin:0 1px}
+.m-sub{color:#a39e8c;font-size:10px;letter-spacing:2.5px;margin-top:4px;text-transform:uppercase}
 
-.m-dock{background:rgba(18,17,14,.88);border:1px solid rgba(200,169,81,.5);padding:8px;display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:8px;box-shadow:0 12px 35px rgba(0,0,0,.75);backdrop-filter:blur(4px)}
-.m-nick{background:#12110e;border:1px solid rgba(200,169,81,.4);border-radius:0;color:#e7e2d0;padding:12px 14px;font-size:12px;font-weight:700;width:150px;outline:none;touch-action:auto}
-.m-btn{background:#23211b;color:#e7e2d0;border:1px solid rgba(200,169,81,.45);border-radius:0;padding:12px 20px;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s}
+.m-dock{background:rgba(18,17,14,.9);border:1px solid rgba(200,169,81,.5);padding:6px;display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:6px;box-shadow:0 12px 35px rgba(0,0,0,.75)}
+.m-nick{background:#12110e;border:1px solid rgba(200,169,81,.4);border-radius:0;color:#e7e2d0;padding:10px 12px;font-size:12px;font-weight:700;width:135px;outline:none;touch-action:auto}
+.m-btn{background:#23211b;color:#e7e2d0;border:1px solid rgba(200,169,81,.45);border-radius:0;padding:10px 16px;font-size:11.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 .m-btn.primary{background:#c8a951;color:#12110e;border-color:#e5c76b}
 .m-btn:active{background:#e7e2d0;color:#12110e}
 
-.win-overlay{position:fixed;inset:0;z-index:110;background:rgba(8,7,5,.72);display:flex;justify-content:center;align-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .28s ease}
+.win-overlay{position:fixed;inset:0;z-index:110;background:rgba(8,7,5,.75);display:flex;justify-content:center;align-items:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .28s ease}
 .win-overlay.open{opacity:1;pointer-events:auto}
-.win-box{width:100%;max-width:540px;background:#161511;border:1.5px solid #c8a951;border-radius:0;padding:20px;color:#e7e2d0;transform:translateY(28px) scale(.96);transition:transform .3s cubic-bezier(.16,1,.3,1);box-shadow:0 20px 50px rgba(0,0,0,.9)}
+.win-box{width:100%;max-width:520px;background:#161511;border:1.5px solid #c8a951;border-radius:0;padding:16px;color:#e7e2d0;transform:translateY(28px) scale(.96);transition:transform .3s cubic-bezier(.16,1,.3,1)}
 .win-overlay.open .win-box{transform:translateY(0) scale(1)}
-.win-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(200,169,81,.3);padding-bottom:10px;margin-bottom:14px}
-.win-top h2{font-size:15px;letter-spacing:1.5px;text-transform:uppercase;color:#c8a951}
-.save-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:14px}
-.save-slot{background:#1f1d17;border:1px solid rgba(255,255,255,.15);border-radius:0;padding:12px;text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.win-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(200,169,81,.3);padding-bottom:8px;margin-bottom:12px}
+.win-top h2{font-size:14px;letter-spacing:1.2px;text-transform:uppercase;color:#c8a951}
+.save-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-bottom:12px}
+.save-slot{background:#1f1d17;border:1px solid rgba(255,255,255,.15);border-radius:0;padding:10px;text-align:left;cursor:pointer}
 .save-slot.unlocked{border-color:rgba(200,169,81,.55)}
 .save-slot.unlocked:active{background:#c8a951;color:#12110e}
-.save-slot.locked{opacity:.45;cursor:not-allowed}
-.save-slot b{display:block;font-size:12.5px;margin-bottom:4px}
-.save-slot span{font-size:10.5px;color:#a39e8c}
-.save-slot.unlocked:active span{color:#12110e}
-.win-in{width:100%;background:#12110e;border:1px solid #c8a951;border-radius:0;color:#e7e2d0;padding:10px;font-size:14px;font-weight:bold;text-align:center;margin-bottom:10px;outline:none;touch-action:auto}
+.save-slot.locked{opacity:.45}
+.save-slot b{display:block;font-size:12px;margin-bottom:3px}
+.save-slot span{font-size:10px;color:#a39e8c}
+.win-in{width:100%;background:#12110e;border:1px solid #c8a951;border-radius:0;color:#e7e2d0;padding:9px;font-size:14px;font-weight:bold;text-align:center;margin-bottom:8px;outline:none;touch-action:auto}
 
 #hud{position:fixed;inset:0;pointer-events:none;display:none}
-#chat-box{position:fixed;top:12px;left:12px;width:225px;background:rgba(14,13,10,.45);border:1px solid rgba(200,169,81,.28);border-radius:8px;padding:6px;z-index:35;pointer-events:auto;transition:opacity .7s ease}
+#chat-box{position:fixed;top:10px;left:10px;width:215px;background:rgba(14,13,10,.45);border:1px solid rgba(200,169,81,.28);border-radius:8px;padding:6px;z-index:35;pointer-events:auto;transition:opacity .7s ease}
 #chat-box.fade{opacity:.18}#chat-box:focus-within{opacity:1!important}
-#chat-log{height:48px;overflow-y:auto;font-size:10.5px;color:#f5f5f4;display:flex;flex-direction:column;gap:2px;margin-bottom:4px;text-shadow:0 1px 2px #000}
+#chat-log{height:46px;overflow-y:auto;font-size:10px;color:#f5f5f4;display:flex;flex-direction:column;gap:2px;margin-bottom:4px;text-shadow:0 1px 2px #000}
 #chat-row{display:flex;gap:4px}
 #chat-in{flex:1;min-width:0;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:4px 6px;border-radius:4px;outline:none;touch-action:auto}
 #chat-ent{background:#b4923e;color:#12110e;border:none;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:800;cursor:pointer}
+#item-prompt{display:none;position:fixed;z-index:25;pointer-events:none;transform:translate(-50%,-100%);flex-direction:column;align-items:center;gap:4px}
+#item-prompt.show{display:flex}
+.ip-card{background:rgba(255,255,255,.94);color:#111;padding:5px 12px;border-radius:10px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.5);white-space:nowrap}
+.ip-sub{background:rgba(15,15,15,.82);color:#fef08a;padding:2px 9px;border-radius:6px;font-size:10.5px;font-weight:800;border:1px solid rgba(255,255,255,.25)}
+
+#room-tag{display:none;position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(18,17,14,.88);border:1px solid #c8a951;padding:5px 12px;color:#c8a951;font-size:11px;font-weight:800;z-index:35}
+#btn-menu{position:fixed;top:10px;right:10px;background:rgba(24,23,19,.85);color:#e7e2d0;border:1px solid rgba(200,169,81,.45);padding:7px 14px;font-size:11px;font-weight:800;pointer-events:auto;z-index:35;cursor:pointer}
+#cross{position:fixed;top:50%;left:50%;width:6px;height:6px;background:rgba(255,255,255,.85);border-radius:50%;transform:translate(-50%,-50%);z-index:20;box-shadow:0 0 4px #000}
+#joy-zone{position:fixed;left:22px;bottom:22px;width:112px;height:112px;border-radius:50%;background:rgba(120,120,120,.32);border:2px solid rgba(200,169,81,.45);pointer-events:auto;z-index:30}
+#joy-stick{position:absolute;left:33px;top:33px;width:42px;height:42px;border-radius:50%;background:rgba(200,169,81,.82)}
+#mini-hud{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;pointer-events:auto;z-index:30}
+.m-hand{width:50px;height:50px;background:rgba(18,17,14,.84);border:1.5px solid #c8a951;border-radius:8px;display:flex;justify-content:center;align-items:center;color:#e7e2d0;font-size:10px;font-weight:bold;text-align:center}
+#btn-bag{height:50px;padding:0 12px;background:rgba(28,26,21,.9);color:#c8a951;border:1.5px solid rgba(200,169,81,.45);border-radius:8px;font-size:10.5px;font-weight:800;cursor:pointer}
+#btn-f{display:none;position:fixed;right:22px;bottom:168px;width:52px;height:52px;border-radius:14px;background:rgba(28,28,28,.9);color:#f5f5f4;border:1.5px solid rgba(255,255,255,.28);font-size:19px;font-weight:900;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-f.show{display:flex}
+#btn-drink{display:none;position:fixed;right:86px;bottom:146px;width:46px;height:46px;border-radius:50%;background:rgba(14,165,233,.9);color:#fff;border:none;font-size:18px;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-drink.show{display:flex}
+#btn-crouch{position:fixed;right:100px;bottom:24px;width:50px;height:50px;border-radius:14px;background:rgba(24,24,24,.88);border:1.5px solid rgba(255,255,255,.2);display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-sprint{position:fixed;right:20px;bottom:74px;width:66px;height:66px;border-radius:16px;background:rgba(24,24,24,.88);border:2px solid #c8a951;display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-crouch.on,#btn-sprint:active,#btn-f:active{background:#c8a951;color:#12110e}
+
+#pad-screen{display:none;position:fixed;inset:0;z-index:90;background:rgba(10,9,6,.82);backdrop-filter:blur(5px);flex-direction:column;justify-content:space-between;padding:16px 22px;pointer-events:auto}
+#pad-screen.on{display:flex}
+.pad-head{display:flex;justify-content:flex-end}
+.pad-title{background:linear-gradient(270deg,rgba(200,169,81,.92),rgba(200,169,81,.15));color:#12110e;padding:6px 24px 6px 42px;border-radius:6px;font-size:15px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}
+.pad-body{display:flex;justify-content:center;align-items:center;gap:18px;flex:1}
+.pad-col{background:rgba(24,22,17,.82);border:1px solid rgba(200,169,81,.35);border-radius:10px;padding:9px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pad-lbl{background:rgba(200,169,81,.2);border:1px solid rgba(200,169,81,.5);color:#e7e2d0;font-size:9px;font-weight:900;padding:3px 8px;border-radius:4px;width:96px;text-align:center}
+.p-cell{width:50px;height:50px;background:#14130f;border:1.5px solid rgba(255,255,255,.16);border-radius:8px;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#f5f5f4;font-size:9.5px;font-weight:bold;text-align:center;cursor:pointer}
+.p-cell.act{border-color:#c8a951;background:rgba(200,169,81,.16)}
+.bp-grid{display:grid;grid-template-columns:repeat(3,50px);gap:5px;background:rgba(24,22,17,.82);padding:9px;border:1px solid rgba(200,169,81,.35);border-radius:10px}
+.san-box{width:100px;height:198px;background:rgba(24,22,17,.88);border:1.5px solid rgba(200,169,81,.4);border-radius:10px;padding:9px;display:flex;flex-direction:column;justify-content:space-between;align-items:center}
+.san-tube{width:32px;height:120px;background:#0c0b08;border:1.5px solid rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden;padding:2px}
+#san-fill{width:100%;height:100%;background:#22c55e;border-radius:6px;transition:height .25s,background .25s}
+.pad-foot{display:flex;justify-content:space-between;align-items:center;color:#a39e8c;font-size:10.5px;font-weight:700}
+#end{position:fixed;inset:0;z-index:150;background:rgba(8,7,4,.96);display:none;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center}
+#end.on{display:flex}#end h2{color:#c8a951;font-size:19px;line-height:1.5;max-width:480px}
+#vig{position:fixed;inset:0;pointer-events:none;z-index:15}
+</style>
+</head>
+<body>
 <div id="main-menu">
 <div class="m-header">
 <div class="m-title">Mobile The Backr<span class="inf">∞</span>ms</div>
@@ -70,8 +110,8 @@ body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:
 <div id="win-coop" class="win-overlay" onclick="if(event.target===this)closeWins()">
 <div class="win-box">
 <div class="win-top"><h2>Совместная игра (Лобби)</h2><button class="m-btn" style="padding:5px 10px" onclick="closeWins()">✕</button></div>
-<button class="m-btn primary" style="width:100%;margin-bottom:12px" onclick="hostRoom()">СОЗДАТЬ ЛОББИ (ВЫ ГЛАВНЫЙ)</button>
-<div style="text-align:center;font-size:11px;color:#a39e8c;margin-bottom:8px">— ИЛИ ВВЕДИТЕ 4-ЗНАЧНЫЙ КОД ДРУГА —</div>
+<button class="m-btn primary" style="width:100%;margin-bottom:10px" onclick="hostRoom()">СОЗДАТЬ ЛОББИ (ВЫ ГЛАВНЫЙ)</button>
+<div style="text-align:center;font-size:11px;color:#a39e8c;margin-bottom:6px">— ИЛИ ВВЕДИТЕ 4-ЗНАЧНЫЙ КОД ДРУГА —</div>
 <input id="join-code" class="win-in" placeholder="0000" maxlength="4">
 <button class="m-btn" style="width:100%" onclick="joinRoom()">ПОДКЛЮЧИТЬСЯ К ЛОББИ</button>
 </div>
@@ -121,7 +161,7 @@ body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:
 <div class="p-cell" id="inv-p1" onclick="equipFrom('p1')"></div>
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
-<div class="pad-lbl" style="width:160px">РЮКЗАК (3×3)</div>
+<div class="pad-lbl" style="width:155px">РЮКЗАК (3×3)</div>
 <div class="bp-grid" id="bp-grid"></div>
 </div>
 <div class="san-box">
@@ -131,7 +171,7 @@ body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:
 </div>
 </div>
 <div class="pad-foot">
-<button class="m-btn" style="padding:8px 18px" onclick="togglePad()">ЗАКРЫТЬ</button>
+<button class="m-btn" style="padding:8px 16px" onclick="togglePad()">ЗАКРЫТЬ</button>
 <span>НАЖМИТЕ НА ПРЕДМЕТ, ЧТОБЫ ВЗЯТЬ В РУКУ</span>
 </div>
 </div>
@@ -142,7 +182,6 @@ body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:
 const DB = "https://firebaseio.com";
 const pid = "p_" + Math.floor(1000 + Math.random() * 9000);
 
-// Все состояния объявлены в самом начале, чтобы избежать ошибок при кликах
 let active = false, st = "MENU", coop = false, isHost = false, code = "";
 let maxLvl = +(localStorage.getItem("mtb_save") || 0), suitCol = 0xc8a951;
 let yaw = 0, pitch = 0, crouch = false, cr = 0, sprint = false;
@@ -150,7 +189,6 @@ let joyX = 0, joyY = 0, joyId = null, lookId = null, lx = 0, ly = 0;
 let padOpen = false, invState = { main: null, p0: null, p1: null, bp: new Array(9).fill(null) };
 let btns = [], itms = [], ld = {}, san = 100, bst = 0, currentAction = null;
 
-// Гул люминесцентных ламп (60 Гц) без внешних файлов
 let humCtx = null, humGain = null;
 function setLampHum(enable) {
     try {
@@ -260,113 +298,6 @@ const tW = loadCustomTex("./wall_0.png", 4, 1, "w");
 const tF = loadCustomTex("./carpet_0.png", 10, 10, "f");
 const tCeil = mkTex("ceil"); tCeil.repeat.set(8, 8);
 const tC = mkTex("c"), tG = mkTex("g"), tA = mkTex("a");
-let chatTimer = null;
-function addChatMsg(txt, col = "#e7e2d0") {
-    const box = document.getElementById("chat-box"), log = document.getElementById("chat-log"), el = document.createElement("div");
-    el.style.color = col; el.innerText = txt; log.appendChild(el); log.scrollTop = log.scrollHeight;
-    box.classList.remove("fade"); clearTimeout(chatTimer);
-    chatTimer = setTimeout(() => box.classList.add("fade"), 6500);
-}
-function sendChat() {
-    const inp = document.getElementById("chat-in"), txt = inp.value.trim();
-    if (!txt) return;
-    inp.value = "";
-    const nick = document.getElementById("inp-nick").value.trim() || "Agent";
-    addChatMsg(`${nick}: ${txt}`, "#ffffff");
-    if (coop && code) fetch(`${DB}/rooms/${code}/chat.json`, { method: "POST", body: JSON.stringify({ u: pid, n: nick, t: txt, ts: Date.now() }) }).catch(() => {});
-}
-document.getElementById("chat-in").addEventListener("keydown", (e) => { if (e.key === "Enter") sendChat(); });
-
-const slvMat = new THREE.MeshStandardMaterial({ color: suitCol, roughness: 0.75 });
-const runArms = new THREE.Group();
-camera.add(runArms);
-function makeSprintArm(side) {
-    const g = new THREE.Group();
-    g.position.set(side * 0.28, -0.58, -0.36);
-    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.044, 0.054, 0.36, 16), slvMat);
-    arm.rotation.x = Math.PI / 2.4;
-    const glove = new THREE.Mesh(new THREE.SphereGeometry(0.048, 14, 14), new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.45 }));
-    glove.scale.set(0.9, 0.85, 1.35);
-    glove.position.set(0, 0.06, -0.18);
-    g.add(arm, glove);
-    runArms.add(g);
-    return g;
-}
-const sprintArmL = makeSprintArm(-1), sprintArmR = makeSprintArm(1);
-let sprintPhase = 0, sprintBlend = 0, idlePhase = 0;
-
-function createNickSprite(name) {
-    const c = document.createElement("canvas"); c.width = 256; c.height = 64;
-    const g = c.getContext("2d");
-    g.fillStyle = "rgba(18, 17, 14, 0.8)"; g.fillRect(16, 10, 224, 44);
-    g.strokeStyle = "#c8a951"; g.lineWidth = 3; g.strokeRect(16, 10, 224, 44);
-    g.fillStyle = "#e7e2d0"; g.font = "bold 24px sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
-    g.fillText(name, 128, 33);
-    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true }));
-    sp.scale.set(1.2, 0.3, 1);
-    sp.position.set(0, 2.05, 0);
-    return sp;
-}
-
-function mkAgent(nickName = "Agent") {
-    const r = new THREE.Group(), sM = new THREE.MeshStandardMaterial({ color: suitCol, roughness: 0.65 });
-    const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.19, 0.56, 18), sM); tr.position.y = 1.24; tr.castShadow = true;
-    const hd = new THREE.Mesh(new THREE.SphereGeometry(0.15, 18, 16), sM); hd.position.y = 1.72;
-    const vs = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 14, -0.9, 1.8, 0.5, 1.1), new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.25 })); vs.position.set(0, 1.72, 0.06);
-    const lL = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.075, 0.85, 14), sM); lL.position.set(-0.1, 0.45, 0);
-    const lR = lL.clone(); lR.position.x = 0.1;
-    const nickSp = createNickSprite(nickName);
-    r.add(tr, hd, vs, lL, lR, nickSp);
-    r.userData = { lL, lR, tp: new THREE.Vector3(), ty: 0, wp: 0, nickSp, lastNick: nickName };
-    return r;
-}
-
-const fr = mkAgent("Напарник"); fr.visible = false; scene.add(fr);
-let es = null, chatEs = null;
-
-function connRoom(c) {
-    if (es) es.close();
-    es = new EventSource(`${DB}/rooms/${c}.json`);
-    const syncRoom = (data) => {
-        if (!data) return;
-        if (!isHost && data.level && data.level !== st) {
-            const mapFn = { L0: lvl0, L1: lvl1, L2: lvl2, L3: lvl3, L4: lvl4 }[data.level];
-            if (mapFn) mapFn();
-        }
-        if (data.players) {
-            for (let [k, v] of Object.entries(data.players)) {
-                if (k !== pid && v && v.x !== undefined) {
-                    fr.visible = true;
-                    fr.userData.tp.set(v.x, v.y, v.z);
-                    fr.userData.ty = v.yaw || 0;
-                    fr.userData.wk = v.wk || false;
-                    if (v.nick && v.nick !== fr.userData.lastNick) {
-                        fr.remove(fr.userData.nickSp);
-                        fr.userData.nickSp = createNickSprite(v.nick);
-                        fr.userData.lastNick = v.nick;
-                        fr.add(fr.userData.nickSp);
-                    }
-                }
-            }
-        }
-    };
-    es.addEventListener("put", (e) => { const m = JSON.parse(e.data); if (m && m.data) syncRoom(m.data); });
-    es.addEventListener("patch", (e) => { const m = JSON.parse(e.data); if (m && m.data) syncRoom(m.data); });
-
-    if (chatEs) chatEs.close();
-    chatEs = new EventSource(`${DB}/rooms/${c}/chat.json`);
-    chatEs.addEventListener("put", (e) => { const m = JSON.parse(e.data); if (m && m.data) for (let v of Object.values(m.data)) if (v && v.u !== pid && Date.now() - (v.ts || 0) < 15000) addChatMsg(`${v.n || "Друг"}: ${v.t}`, "#7dd3fc"); });
-    chatEs.addEventListener("patch", (e) => { const m = JSON.parse(e.data); if (m && m.data) for (let v of Object.values(m.data)) if (v && v.u !== pid) addChatMsg(`${v.n || "Друг"}: ${v.t}`, "#7dd3fc"); });
-}
-
-setInterval(() => {
-    if (!coop || !code || !active) return;
-    const nick = document.getElementById("inp-nick").value.trim() || "Agent";
-    fetch(`${DB}/rooms/${code}/players/${pid}.json`, {
-        method: "PUT",
-        body: JSON.stringify({ x: rig.position.x, y: rig.position.y - 1.65, z: rig.position.z, yaw, wk: Math.hypot(joyX, joyY) > 0.1, nick })
-    }).catch(() => {});
-}, 140);
 const wg = new THREE.Group(); scene.add(wg);
 
 function clr() { while (wg.children.length) wg.remove(wg.children); btns = []; itms = []; ld = {}; }
@@ -400,7 +331,6 @@ const mCeil = new THREE.MeshStandardMaterial({ map: tCeil, emissive: 0x3f3c26, e
 const mC = new THREE.MeshStandardMaterial({ map: tC, roughness: 0.88, metalness: 0.0 });
 const mG = new THREE.MeshStandardMaterial({ map: tG, roughness: 0.75 }), mA = new THREE.MeshStandardMaterial({ map: tA, roughness: 0.9 });
 
-// Комната Backrooms на фоне главного меню
 function buildMenuBackdrop() {
     clr(); st = "MENU"; setLampHum(false); scene.fog = new THREE.FogExp2(0x181509, 0.042);
     rig.position.set(0, 1.65, 4.5); yaw = 0.08; pitch = 0;
@@ -409,7 +339,6 @@ function buildMenuBackdrop() {
     box(-6.5, 1.6, -6, 0.4, 3.2, 30, mW);
     box(6.5, 1.6, -6, 0.4, 3.2, 30, mW);
     box(0, 1.6, -18, 26, 3.2, 0.4, mW);
-    // Колонны и перегородки комнаты Backrooms
     box(-2.4, 1.6, -2.5, 0.9, 3.2, 0.9, mW);
     box(2.6, 1.6, -5.5, 0.9, 3.2, 0.9, mW);
     box(-1.5, 1.6, -10.5, 4.5, 3.2, 0.4, mW);
@@ -646,7 +575,7 @@ jz.addEventListener("touchstart", (e) => { const t = e.changedTouches.item(0); j
 jz.addEventListener("touchmove", (e) => { for (let i = 0; i < e.changedTouches.length; i++) { const t = e.changedTouches.item(i); if (t.identifier === joyId) updJoy(t); } });
 jz.addEventListener("touchend", (e) => { for (let i = 0; i < e.changedTouches.length; i++) { if (e.changedTouches.item(i).identifier === joyId) { joyId = null; joyX = joyY = 0; js.style.transform = "translate(0,0)"; } } });
 function updJoy(t) {
-    const r = jz.getBoundingClientRect(), dx = t.clientX - (r.left + 57), dy = t.clientY - (r.top + 57);
+    const r = jz.getBoundingClientRect(), dx = t.clientX - (r.left + 56), dy = t.clientY - (r.top + 56);
     const d = Math.min(35, Math.hypot(dx, dy)), a = Math.atan2(dy, dx);
     joyX = Math.cos(a) * (d / 35); joyY = Math.sin(a) * (d / 35);
     js.style.transform = `translate(${joyX * 35}px,${joyY * 35}px)`;
