@@ -7,183 +7,47 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;user-select:none;touch-action:none}
 body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:100vh}
 
-#main-menu{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,rgba(14,13,10,.3) 0%,rgba(8,7,5,.75) 100%);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:24px 16px}
+#main-menu{position:fixed;inset:0;z-index:100;background:linear-gradient(90deg,rgba(12,11,8,.78) 0%,rgba(12,11,8,.28) 55%,rgba(12,11,8,.42) 100%);display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:24px 32px}
 #main-menu.off{display:none}
-.m-header{text-align:center;margin-top:6px}
-.m-title{color:#e7e2d0;font-size:28px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;text-shadow:0 4px 18px rgba(0,0,0,.9)}
-.m-title .inf{color:#c8a951;font-size:34px;display:inline-block;transform:translateY(2px);margin:0 1px}
-.m-sub{color:#a39e8c;font-size:10px;letter-spacing:2.5px;margin-top:4px;text-transform:uppercase}
+.m-header{text-align:left}
+.m-title{color:#f5f0dc;font-size:28px;font-weight:900;letter-spacing:2px;text-transform:uppercase;text-shadow:0 3px 14px rgba(0,0,0,.95)}
+.m-title .inf{color:#e0be53;font-size:inherit;font-weight:inherit;line-height:inherit;display:inline}
+.m-sub{color:#c2bca6;font-size:10px;letter-spacing:2.2px;margin-top:4px;text-transform:uppercase;text-shadow:0 2px 6px #000}
 
-.m-dock{background:rgba(18,17,14,.9);border:1px solid rgba(200,169,81,.5);padding:6px;display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:6px;box-shadow:0 12px 35px rgba(0,0,0,.75)}
-.m-nick{background:#12110e;border:1px solid rgba(200,169,81,.4);border-radius:0;color:#e7e2d0;padding:10px 12px;font-size:12px;font-weight:700;width:135px;outline:none;touch-action:auto}
-.m-btn{background:#23211b;color:#e7e2d0;border:1px solid rgba(200,169,81,.45);border-radius:0;padding:10px 16px;font-size:11.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
-.m-btn.primary{background:#c8a951;color:#12110e;border-color:#e5c76b}
-.m-btn:active{background:#e7e2d0;color:#12110e}
+/* Кнопки выстроены друг за другом сверху вниз, как в Escape the Backrooms */
+.m-dock{width:235px;background:rgba(18,17,14,.76);border:1px solid rgba(224,190,83,.42);padding:10px;display:flex;flex-direction:column;gap:8px;box-shadow:0 12px 35px rgba(0,0,0,.75);backdrop-filter:blur(3px)}
+.m-nick{width:100%;background:#12110e;border:1px solid rgba(224,190,83,.45);border-radius:0;color:#f5f0dc;padding:9px 11px;font-size:12px;font-weight:700;outline:none;touch-action:auto}
+.m-btn{width:100%;background:#23211b;color:#f5f0dc;border:none;border-left:4px solid rgba(224,190,83,.65);border-radius:0;padding:10px 12px;text-align:left;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .15s,padding-left .15s}
+.m-btn.primary{background:#d4b24c;color:#12110e;border-left:4px solid #fff}
+.m-btn:active{background:#f5f0dc;color:#12110e;padding-left:16px}
 
 .win-overlay{position:fixed;inset:0;z-index:110;background:rgba(8,7,5,.75);display:flex;justify-content:center;align-items:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .28s ease}
 .win-overlay.open{opacity:1;pointer-events:auto}
-.win-box{width:100%;max-width:520px;background:#161511;border:1.5px solid #c8a951;border-radius:0;padding:16px;color:#e7e2d0;transform:translateY(28px) scale(.96);transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.win-box{width:100%;max-width:520px;background:#161511;border:1.5px solid #d4b24c;border-radius:0;padding:16px;color:#f5f0dc;transform:translateY(28px) scale(.96);transition:transform .3s cubic-bezier(.16,1,.3,1)}
 .win-overlay.open .win-box{transform:translateY(0) scale(1)}
-.win-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(200,169,81,.3);padding-bottom:8px;margin-bottom:12px}
-.win-top h2{font-size:14px;letter-spacing:1.2px;text-transform:uppercase;color:#c8a951}
+.win-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(212,178,76,.3);padding-bottom:8px;margin-bottom:12px}
+.win-top h2{font-size:14px;letter-spacing:1.2px;text-transform:uppercase;color:#d4b24c}
 .save-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-bottom:12px}
 .save-slot{background:#1f1d17;border:1px solid rgba(255,255,255,.15);border-radius:0;padding:10px;text-align:left;cursor:pointer}
-.save-slot.unlocked{border-color:rgba(200,169,81,.55)}
-.save-slot.unlocked:active{background:#c8a951;color:#12110e}
+.save-slot.unlocked{border-color:rgba(212,178,76,.6)}
+.save-slot.unlocked:active{background:#d4b24c;color:#12110e}
 .save-slot.locked{opacity:.45}
-.save-slot b{display:block;font-size:12px;margin-bottom:3px}
+.save-slot b{display:block;font-size:12px;margin-bottom:3px;color:#f5f0dc}
 .save-slot span{font-size:10px;color:#a39e8c}
-.win-in{width:100%;background:#12110e;border:1px solid #c8a951;border-radius:0;color:#e7e2d0;padding:9px;font-size:14px;font-weight:bold;text-align:center;margin-bottom:8px;outline:none;touch-action:auto}
+.win-in{width:100%;background:#12110e;border:1px solid #d4b24c;border-radius:0;color:#f5f0dc;padding:9px;font-size:14px;font-weight:bold;text-align:center;margin-bottom:8px;outline:none;touch-action:auto}
 
 #hud{position:fixed;inset:0;pointer-events:none;display:none}
-#chat-box{position:fixed;top:10px;left:10px;width:215px;background:rgba(14,13,10,.45);border:1px solid rgba(200,169,81,.28);border-radius:8px;padding:6px;z-index:35;pointer-events:auto;transition:opacity .7s ease}
+#chat-box{position:fixed;top:10px;left:10px;width:215px;background:rgba(14,13,10,.45);border:1px solid rgba(212,178,76,.28);border-radius:8px;padding:6px;z-index:35;pointer-events:auto;transition:opacity .7s ease}
 #chat-box.fade{opacity:.18}#chat-box:focus-within{opacity:1!important}
 #chat-log{height:46px;overflow-y:auto;font-size:10px;color:#f5f5f4;display:flex;flex-direction:column;gap:2px;margin-bottom:4px;text-shadow:0 1px 2px #000}
 #chat-row{display:flex;gap:4px}
 #chat-in{flex:1;min-width:0;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:4px 6px;border-radius:4px;outline:none;touch-action:auto}
 #chat-ent{background:#b4923e;color:#12110e;border:none;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:800;cursor:pointer}
-#item-prompt{display:none;position:fixed;z-index:25;pointer-events:none;transform:translate(-50%,-100%);flex-direction:column;align-items:center;gap:4px}
-#item-prompt.show{display:flex}
-.ip-card{background:rgba(255,255,255,.94);color:#111;padding:5px 12px;border-radius:10px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.5);white-space:nowrap}
-.ip-sub{background:rgba(15,15,15,.82);color:#fef08a;padding:2px 9px;border-radius:6px;font-size:10.5px;font-weight:800;border:1px solid rgba(255,255,255,.25)}
-
-#room-tag{display:none;position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(18,17,14,.88);border:1px solid #c8a951;padding:5px 12px;color:#c8a951;font-size:11px;font-weight:800;z-index:35}
-#btn-menu{position:fixed;top:10px;right:10px;background:rgba(24,23,19,.85);color:#e7e2d0;border:1px solid rgba(200,169,81,.45);padding:7px 14px;font-size:11px;font-weight:800;pointer-events:auto;z-index:35;cursor:pointer}
-#cross{position:fixed;top:50%;left:50%;width:6px;height:6px;background:rgba(255,255,255,.85);border-radius:50%;transform:translate(-50%,-50%);z-index:20;box-shadow:0 0 4px #000}
-#joy-zone{position:fixed;left:22px;bottom:22px;width:112px;height:112px;border-radius:50%;background:rgba(120,120,120,.32);border:2px solid rgba(200,169,81,.45);pointer-events:auto;z-index:30}
-#joy-stick{position:absolute;left:33px;top:33px;width:42px;height:42px;border-radius:50%;background:rgba(200,169,81,.82)}
-#mini-hud{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;pointer-events:auto;z-index:30}
-.m-hand{width:50px;height:50px;background:rgba(18,17,14,.84);border:1.5px solid #c8a951;border-radius:8px;display:flex;justify-content:center;align-items:center;color:#e7e2d0;font-size:10px;font-weight:bold;text-align:center}
-#btn-bag{height:50px;padding:0 12px;background:rgba(28,26,21,.9);color:#c8a951;border:1.5px solid rgba(200,169,81,.45);border-radius:8px;font-size:10.5px;font-weight:800;cursor:pointer}
-#btn-f{display:none;position:fixed;right:22px;bottom:168px;width:52px;height:52px;border-radius:14px;background:rgba(28,28,28,.9);color:#f5f5f4;border:1.5px solid rgba(255,255,255,.28);font-size:19px;font-weight:900;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
-#btn-f.show{display:flex}
-#btn-drink{display:none;position:fixed;right:86px;bottom:146px;width:46px;height:46px;border-radius:50%;background:rgba(14,165,233,.9);color:#fff;border:none;font-size:18px;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
-#btn-drink.show{display:flex}
-#btn-crouch{position:fixed;right:100px;bottom:24px;width:50px;height:50px;border-radius:14px;background:rgba(24,24,24,.88);border:1.5px solid rgba(255,255,255,.2);display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
-#btn-sprint{position:fixed;right:20px;bottom:74px;width:66px;height:66px;border-radius:16px;background:rgba(24,24,24,.88);border:2px solid #c8a951;display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
-#btn-crouch.on,#btn-sprint:active,#btn-f:active{background:#c8a951;color:#12110e}
-
-#pad-screen{display:none;position:fixed;inset:0;z-index:90;background:rgba(10,9,6,.82);backdrop-filter:blur(5px);flex-direction:column;justify-content:space-between;padding:16px 22px;pointer-events:auto}
-#pad-screen.on{display:flex}
-.pad-head{display:flex;justify-content:flex-end}
-.pad-title{background:linear-gradient(270deg,rgba(200,169,81,.92),rgba(200,169,81,.15));color:#12110e;padding:6px 24px 6px 42px;border-radius:6px;font-size:15px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}
-.pad-body{display:flex;justify-content:center;align-items:center;gap:18px;flex:1}
-.pad-col{background:rgba(24,22,17,.82);border:1px solid rgba(200,169,81,.35);border-radius:10px;padding:9px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.pad-lbl{background:rgba(200,169,81,.2);border:1px solid rgba(200,169,81,.5);color:#e7e2d0;font-size:9px;font-weight:900;padding:3px 8px;border-radius:4px;width:96px;text-align:center}
-.p-cell{width:50px;height:50px;background:#14130f;border:1.5px solid rgba(255,255,255,.16);border-radius:8px;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#f5f5f4;font-size:9.5px;font-weight:bold;text-align:center;cursor:pointer}
-.p-cell.act{border-color:#c8a951;background:rgba(200,169,81,.16)}
-.bp-grid{display:grid;grid-template-columns:repeat(3,50px);gap:5px;background:rgba(24,22,17,.82);padding:9px;border:1px solid rgba(200,169,81,.35);border-radius:10px}
-.san-box{width:100px;height:198px;background:rgba(24,22,17,.88);border:1.5px solid rgba(200,169,81,.4);border-radius:10px;padding:9px;display:flex;flex-direction:column;justify-content:space-between;align-items:center}
-.san-tube{width:32px;height:120px;background:#0c0b08;border:1.5px solid rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden;padding:2px}
-#san-fill{width:100%;height:100%;background:#22c55e;border-radius:6px;transition:height .25s,background .25s}
-.pad-foot{display:flex;justify-content:space-between;align-items:center;color:#a39e8c;font-size:10.5px;font-weight:700}
-#end{position:fixed;inset:0;z-index:150;background:rgba(8,7,4,.96);display:none;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center}
-#end.on{display:flex}#end h2{color:#c8a951;font-size:19px;line-height:1.5;max-width:480px}
-#vig{position:fixed;inset:0;pointer-events:none;z-index:15}
-</style>
-</head>
-<body>
-<div id="main-menu">
-<div class="m-header">
-<div class="m-title">Mobile The Backr<span class="inf">∞</span>ms</div>
-<div class="m-sub">liminal expedition protocol</div>
-</div>
-<div class="m-dock">
-<input id="inp-nick" class="m-nick" value="Agent_01" maxlength="16" placeholder="Позывной">
-<button class="m-btn primary" onclick="openWin('saves')">ИГРАТЬ</button>
-<button class="m-btn" onclick="openWin('coop')">КООПЕРАТИВ</button>
-<button class="m-btn" onclick="openWin('suit')">УНИФОРМА</button>
-</div>
-</div>
-
-<div id="win-saves" class="win-overlay" onclick="if(event.target===this)closeWins()">
-<div class="win-box">
-<div class="win-top"><h2>Выбор сохранения / Сектора</h2><button class="m-btn" style="padding:5px 10px" onclick="closeWins()">✕</button></div>
-<div class="save-grid" id="save-grid"></div>
-<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#a39e8c">
-<span>Прогресс сохраняется автоматически</span>
-<button class="m-btn" style="padding:6px 12px;font-size:10px" onclick="resetSaves()">СБРОСИТЬ ПРОГРЕСС</button>
-</div>
-</div>
-</div>
-
-<div id="win-coop" class="win-overlay" onclick="if(event.target===this)closeWins()">
-<div class="win-box">
-<div class="win-top"><h2>Совместная игра (Лобби)</h2><button class="m-btn" style="padding:5px 10px" onclick="closeWins()">✕</button></div>
-<button class="m-btn primary" style="width:100%;margin-bottom:10px" onclick="hostRoom()">СОЗДАТЬ ЛОББИ (ВЫ ГЛАВНЫЙ)</button>
-<div style="text-align:center;font-size:11px;color:#a39e8c;margin-bottom:6px">— ИЛИ ВВЕДИТЕ 4-ЗНАЧНЫЙ КОД ДРУГА —</div>
-<input id="join-code" class="win-in" placeholder="0000" maxlength="4">
-<button class="m-btn" style="width:100%" onclick="joinRoom()">ПОДКЛЮЧИТЬСЯ К ЛОББИ</button>
-</div>
-</div>
-
-<div id="win-suit" class="win-overlay" onclick="if(event.target===this)closeWins()">
-<div class="win-box">
-<div class="win-top"><h2>Униформа исследователя</h2><button class="m-btn" style="padding:5px 10px" onclick="closeWins()">✕</button></div>
-<div style="display:flex;flex-direction:column;gap:8px">
-<button class="m-btn" onclick="pickSuit(0xc8a951)">ЛАТУННЫЙ СТАНДАРТ</button>
-<button class="m-btn" onclick="pickSuit(0x4b7bec)">СТАЛЬНОЙ СИНИЙ</button>
-<button class="m-btn" onclick="pickSuit(0xa55eea)">ГРАФИТОВО-ФИОЛЕТОВЫЙ</button>
-</div>
-</div>
-</div>
-
-<div id="vig"></div><div id="cross"></div>
-<div id="item-prompt"><div class="ip-card" id="ip-name">Предмет</div><div class="ip-sub">Нажмите F</div></div>
-
-<div id="hud">
-<div id="chat-box" class="fade">
-<div id="chat-log"></div>
-<div id="chat-row"><input id="chat-in" placeholder="Сообщение..." maxlength="60"><button id="chat-ent" onclick="sendChat()">Enter</button></div>
-</div>
-<div id="room-tag">ЛОББИ: <span id="rc">----</span></div>
-<button id="btn-menu" onclick="toTermMenu()">В Меню</button>
-<div id="joy-zone"><div id="joy-stick"></div></div>
-<div id="mini-hud">
-<div class="m-hand" id="hud-hand" onclick="togglePad()">ПУСТО</div>
-<button id="btn-bag" onclick="togglePad()">РЮКЗАК</button>
-</div>
-<button id="btn-drink" onclick="drinkWater()" title="Выпить">💧</button>
-<button id="btn-f" onclick="doInteract()">F</button>
-<button id="btn-crouch" onclick="toggleCrouch()"><svg width="22" height="22" viewBox="0 0 24 24" fill="#e7e5e4"><circle cx="12" cy="6" r="2.5"/><path d="M9 11h6l1 4h-3v4h-2v-4H8z"/></svg></button>
-<button id="btn-sprint" ontouchstart="sprint=true" ontouchend="sprint=false" onmousedown="sprint=true" onmouseup="sprint=false"><svg width="28" height="28" viewBox="0 0 24 24" fill="#c8a951"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></button>
-</div>
-
-<div id="pad-screen">
-<div class="pad-head"><div class="pad-title">Снаряжение</div></div>
-<div class="pad-body">
-<div class="pad-col">
-<div class="pad-lbl">БЫСТРЫЙ ДОСТУП</div>
-<div style="font-size:9px;color:#a39e8c;font-weight:800">В РУКЕ</div>
-<div class="p-cell act" id="inv-main" onclick="unequipMain()"></div>
-<div style="font-size:9px;color:#a39e8c;font-weight:800;margin-top:3px">КАРМАНЫ</div>
-<div class="p-cell" id="inv-p0" onclick="equipFrom('p0')"></div>
-<div class="p-cell" id="inv-p1" onclick="equipFrom('p1')"></div>
-</div>
-<div style="display:flex;flex-direction:column;align-items:center;gap:6px">
-<div class="pad-lbl" style="width:155px">РЮКЗАК (3×3)</div>
-<div class="bp-grid" id="bp-grid"></div>
-</div>
-<div class="san-box">
-<div style="font-size:9.5px;color:#c8a951;font-weight:900;text-align:center">РАССУДОК</div>
-<div class="san-tube"><div id="san-fill"></div></div>
-<div id="san-pct" style="color:#22c55e;font-size:13px;font-weight:900">100%</div>
-</div>
-</div>
-<div class="pad-foot">
-<button class="m-btn" style="padding:8px 16px" onclick="togglePad()">ЗАКРЫТЬ</button>
-<span>НАЖМИТЕ НА ПРЕДМЕТ, ЧТОБЫ ВЗЯТЬ В РУКУ</span>
-</div>
-</div>
-
-<div id="end"><h2>Спасибо за прохождение Бета-Теста Mobile The Backrooms! В скором времени появятся новые уровни. Удачи!</h2></div>
-<script src="./three.min.js"></script>
-<script>
 const DB = "https://firebaseio.com";
 const pid = "p_" + Math.floor(1000 + Math.random() * 9000);
 
 let active = false, st = "MENU", coop = false, isHost = false, code = "";
-let maxLvl = +(localStorage.getItem("mtb_save") || 0), suitCol = 0xc8a951;
+let maxLvl = +(localStorage.getItem("mtb_save") || 0), suitCol = 0xd4b24c;
 let yaw = 0, pitch = 0, crouch = false, cr = 0, sprint = false;
 let joyX = 0, joyY = 0, joyId = null, lookId = null, lx = 0, ly = 0;
 let padOpen = false, invState = { main: null, p0: null, p1: null, bp: new Array(9).fill(null) };
@@ -198,17 +62,17 @@ function setLampHum(enable) {
             humGain = humCtx.createGain();
             osc.type = "sawtooth"; osc.frequency.value = 60;
             flt.type = "lowpass"; flt.frequency.value = 140;
-            humGain.gain.value = 0.035;
+            humGain.gain.value = 0.03;
             osc.connect(flt); flt.connect(humGain); humGain.connect(humCtx.destination);
             osc.start();
         }
-        if (humGain) humGain.gain.setTargetAtTime(enable ? 0.035 : 0.0001, humCtx.currentTime, 0.2);
+        if (humGain) humGain.gain.setTargetAtTime(enable ? 0.03 : 0.0001, humCtx.currentTime, 0.2);
     } catch (e) {}
 }
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x141106);
-scene.fog = new THREE.FogExp2(0x181408, 0.038);
+scene.background = new THREE.Color(0x2e2914);
+scene.fog = new THREE.FogExp2(0x2e2914, 0.022);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.05, 130);
 const rig = new THREE.Group();
@@ -217,8 +81,7 @@ rig.add(camera);
 scene.add(rig);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = false;
 document.body.appendChild(renderer.domElement);
 
 function updateViewportQuality() {
@@ -247,31 +110,31 @@ function loadCustomTex(file, rx, ry, fallbackType) {
     return fallback;
 }
 
-function mkTex(tp, txt = "", bg = "#c8a951", fg = "#12110e") {
+function mkTex(tp, txt = "", bg = "#d4b24c", fg = "#12110e") {
     const c = document.createElement("canvas"); c.width = c.height = 512;
     const g = c.getContext("2d");
     if (tp === "w") {
-        g.fillStyle = "#96963c"; g.fillRect(0, 0, 512, 512);
-        g.fillStyle = "#7a7a2e";
+        g.fillStyle = "#a39f42"; g.fillRect(0, 0, 512, 512);
+        g.fillStyle = "#868232";
         for (let x = 0; x < 512; x += 48) {
             g.fillRect(x, 0, 6, 512);
             for (let y = 0; y < 512; y += 48) { g.fillRect(x + 18, y + 14, 12, 20); }
         }
     } else if (tp === "f") {
-        g.fillStyle = "#8a8538"; g.fillRect(0, 0, 512, 512);
+        g.fillStyle = "#948e3d"; g.fillRect(0, 0, 512, 512);
         for (let i = 0; i < 4000; i++) {
-            g.fillStyle = i % 2 ? "rgba(0,0,0,0.12)" : "rgba(255,250,200,0.07)";
+            g.fillStyle = i % 2 ? "rgba(0,0,0,0.1)" : "rgba(255,250,200,0.08)";
             g.fillRect(Math.random() * 512, Math.random() * 512, 3, 3);
         }
     } else if (tp === "ceil") {
-        g.fillStyle = "#b8b28a"; g.fillRect(0, 0, 512, 512);
-        for (let i = 0; i < 2500; i++) { g.fillStyle = "rgba(0,0,0,0.08)"; g.fillRect(Math.random() * 512, Math.random() * 512, 2, 2); }
-        g.strokeStyle = "#6e6a52"; g.lineWidth = 8;
+        g.fillStyle = "#cfc89b"; g.fillRect(0, 0, 512, 512);
+        for (let i = 0; i < 2000; i++) { g.fillStyle = "rgba(0,0,0,0.06)"; g.fillRect(Math.random() * 512, Math.random() * 512, 2, 2); }
+        g.strokeStyle = "#7a7558"; g.lineWidth = 8;
         for (let i = 0; i <= 512; i += 128) {
             g.beginPath(); g.moveTo(i, 0); g.lineTo(i, 512); g.stroke();
             g.beginPath(); g.moveTo(0, i); g.lineTo(512, i); g.stroke();
         }
-        g.fillStyle = "#fefce8";
+        g.fillStyle = "#ffffff";
         g.fillRect(134, 134, 116, 116);
         g.fillRect(390, 390, 116, 116);
     } else if (tp === "c") {
@@ -298,22 +161,138 @@ const tW = loadCustomTex("./wall_0.png", 4, 1, "w");
 const tF = loadCustomTex("./carpet_0.png", 10, 10, "f");
 const tCeil = mkTex("ceil"); tCeil.repeat.set(8, 8);
 const tC = mkTex("c"), tG = mkTex("g"), tA = mkTex("a");
+let chatTimer = null;
+function addChatMsg(txt, col = "#f5f0dc") {
+    const box = document.getElementById("chat-box"), log = document.getElementById("chat-log"), el = document.createElement("div");
+    el.style.color = col; el.innerText = txt; log.appendChild(el); log.scrollTop = log.scrollHeight;
+    box.classList.remove("fade"); clearTimeout(chatTimer);
+    chatTimer = setTimeout(() => box.classList.add("fade"), 6500);
+}
+function sendChat() {
+    const inp = document.getElementById("chat-in"), txt = inp.value.trim();
+    if (!txt) return;
+    inp.value = "";
+    const nick = document.getElementById("inp-nick").value.trim() || "Agent";
+    addChatMsg(`${nick}: ${txt}`, "#ffffff");
+    if (coop && code) fetch(`${DB}/rooms/${code}/chat.json`, { method: "POST", body: JSON.stringify({ u: pid, n: nick, t: txt, ts: Date.now() }) }).catch(() => {});
+}
+document.getElementById("chat-in").addEventListener("keydown", (e) => { if (e.key === "Enter") sendChat(); });
+
+const slvMat = new THREE.MeshStandardMaterial({ color: suitCol, roughness: 0.75 });
+const runArms = new THREE.Group();
+camera.add(runArms);
+function makeSprintArm(side) {
+    const g = new THREE.Group();
+    g.position.set(side * 0.28, -0.58, -0.36);
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.044, 0.054, 0.36, 16), slvMat);
+    arm.rotation.x = Math.PI / 2.4;
+    const glove = new THREE.Mesh(new THREE.SphereGeometry(0.048, 14, 14), new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.45 }));
+    glove.scale.set(0.9, 0.85, 1.35);
+    glove.position.set(0, 0.06, -0.18);
+    g.add(arm, glove);
+    runArms.add(g);
+    return g;
+}
+const sprintArmL = makeSprintArm(-1), sprintArmR = makeSprintArm(1);
+let sprintPhase = 0, sprintBlend = 0, idlePhase = 0;
+
+function createNickSprite(name) {
+    const c = document.createElement("canvas"); c.width = 256; c.height = 64;
+    const g = c.getContext("2d");
+    g.fillStyle = "rgba(18, 17, 14, 0.8)"; g.fillRect(16, 10, 224, 44);
+    g.strokeStyle = "#d4b24c"; g.lineWidth = 3; g.strokeRect(16, 10, 224, 44);
+    g.fillStyle = "#f5f0dc"; g.font = "bold 24px sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
+    g.fillText(name, 128, 33);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true }));
+    sp.scale.set(1.2, 0.3, 1);
+    sp.position.set(0, 2.05, 0);
+    return sp;
+}
+
+function mkAgent(nickName = "Agent") {
+    const r = new THREE.Group(), sM = new THREE.MeshStandardMaterial({ color: suitCol, roughness: 0.65 });
+    const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.19, 0.56, 18), sM); tr.position.y = 1.24;
+    const hd = new THREE.Mesh(new THREE.SphereGeometry(0.15, 18, 16), sM); hd.position.y = 1.72;
+    const vs = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 14, -0.9, 1.8, 0.5, 1.1), new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.25 })); vs.position.set(0, 1.72, 0.06);
+    const lL = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.075, 0.85, 14), sM); lL.position.set(-0.1, 0.45, 0);
+    const lR = lL.clone(); lR.position.x = 0.1;
+    const nickSp = createNickSprite(nickName);
+    r.add(tr, hd, vs, lL, lR, nickSp);
+    r.userData = { lL, lR, tp: new THREE.Vector3(), ty: 0, wp: 0, nickSp, lastNick: nickName };
+    return r;
+}
+
+const fr = mkAgent("Напарник"); fr.visible = false; scene.add(fr);
+let es = null, chatEs = null;
+
+function connRoom(c) {
+    if (es) es.close();
+    es = new EventSource(`${DB}/rooms/${c}.json`);
+    const syncRoom = (data) => {
+        if (!data) return;
+        if (!isHost && data.level && data.level !== st) {
+            const mapFn = { L0: lvl0, L1: lvl1, L2: lvl2, L3: lvl3, L4: lvl4 }[data.level];
+            if (mapFn) mapFn();
+        }
+        if (data.players) {
+            for (let [k, v] of Object.entries(data.players)) {
+                if (k !== pid && v && v.x !== undefined) {
+                    fr.visible = true;
+                    fr.userData.tp.set(v.x, v.y, v.z);
+                    fr.userData.ty = v.yaw || 0;
+                    fr.userData.wk = v.wk || false;
+                    if (v.nick && v.nick !== fr.userData.lastNick) {
+                        fr.remove(fr.userData.nickSp);
+                        fr.userData.nickSp = createNickSprite(v.nick);
+                        fr.userData.lastNick = v.nick;
+                        fr.add(fr.userData.nickSp);
+                    }
+                }
+            }
+        }
+    };
+    es.addEventListener("put", (e) => { const m = JSON.parse(e.data); if (m && m.data) syncRoom(m.data); });
+    es.addEventListener("patch", (e) => { const m = JSON.parse(e.data); if (m && m.data) syncRoom(m.data); });
+
+    if (chatEs) chatEs.close();
+    chatEs = new EventSource(`${DB}/rooms/${c}/chat.json`);
+    chatEs.addEventListener("put", (e) => { const m = JSON.parse(e.data); if (m && m.data) for (let v of Object.values(m.data)) if (v && v.u !== pid && Date.now() - (v.ts || 0) < 15000) addChatMsg(`${v.n || "Друг"}: ${v.t}`, "#7dd3fc"); });
+    chatEs.addEventListener("patch", (e) => { const m = JSON.parse(e.data); if (m && m.data) for (let v of Object.values(m.data)) if (v && v.u !== pid) addChatMsg(`${v.n || "Друг"}: ${v.t}`, "#7dd3fc"); });
+}
+
+setInterval(() => {
+    if (!coop || !code || !active) return;
+    const nick = document.getElementById("inp-nick").value.trim() || "Agent";
+    fetch(`${DB}/rooms/${code}/players/${pid}.json`, {
+        method: "PUT",
+        body: JSON.stringify({ x: rig.position.x, y: rig.position.y - 1.65, z: rig.position.z, yaw, wk: Math.hypot(joyX, joyY) > 0.1, nick })
+    }).catch(() => {});
+}, 140);
 const wg = new THREE.Group(); scene.add(wg);
 
 function clr() { while (wg.children.length) wg.remove(wg.children); btns = []; itms = []; ld = {}; }
-function addL(x, y, z, col = 0xfef9c3, int = 1.05, d = 24) {
-    const l = new THREE.PointLight(col, int, d);
-    l.position.set(x, y, z); l.castShadow = true;
-    l.shadow.mapSize.width = 512; l.shadow.mapSize.height = 512; l.shadow.bias = -0.002;
-    wg.add(l); return l;
+
+// Мощное яркое освещение до самого пола (как в настоящем Backrooms)
+function addBrightCeilingLight(bright = 1.65) {
+    const hemi = new THREE.HemisphereLight(0xfffbeb, 0x8a8240, bright);
+    const dir = new THREE.DirectionalLight(0xfffef0, bright * 0.65);
+    dir.position.set(2, 12, 4);
+    wg.add(hemi, dir);
+}
+function addL(x, y, z, col = 0xfffef0, int = 2.4, d = 34) {
+    const l = new THREE.PointLight(col, int, d, 1.0);
+    l.position.set(x, y, z);
+    l.castShadow = false;
+    wg.add(l);
+    return l;
 }
 function addB(x, y, z, w, h, txt, bg, fg, fn, label = "Панель управления") {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.08), new THREE.MeshStandardMaterial({ map: mkTex("s", txt, bg, fg), roughness: 0.7 }));
     m.position.set(x, y, z); wg.add(m); btns.push({ m, fn, label });
 }
-function box(x, y, z, w, h, d, mat, sh = true) {
+function box(x, y, z, w, h, d, mat) {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-    m.position.set(x, y, z); m.castShadow = sh; m.receiveShadow = true; wg.add(m); return m;
+    m.position.set(x, y, z); wg.add(m); return m;
 }
 function spIt(tp, x, y, z) {
     const names = { water: "Миндальная вода", key: "Ключ от двери", ladder: "Часть лестницы" };
@@ -321,29 +300,35 @@ function spIt(tp, x, y, z) {
               tp === "key" ? new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.025, 10, 20), new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.4 })) :
               new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.68, 12), new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.8 }));
     if (tp === "ladder") m.rotation.z = Math.PI / 2;
-    m.position.set(x, y, z); m.castShadow = true; wg.add(m);
+    m.position.set(x, y, z); wg.add(m);
     itms.push({ tp, m, tk: false, label: names[tp] });
 }
 
 const mW = new THREE.MeshStandardMaterial({ map: tW, roughness: 0.92, metalness: 0.0 });
 const mF = new THREE.MeshStandardMaterial({ map: tF, roughness: 0.96, metalness: 0.0 });
-const mCeil = new THREE.MeshStandardMaterial({ map: tCeil, emissive: 0x3f3c26, emissiveIntensity: 0.35, roughness: 0.85 });
+const mCeil = new THREE.MeshStandardMaterial({ map: tCeil, emissive: 0x736e46, emissiveIntensity: 0.65, roughness: 0.8 });
 const mC = new THREE.MeshStandardMaterial({ map: tC, roughness: 0.88, metalness: 0.0 });
 const mG = new THREE.MeshStandardMaterial({ map: tG, roughness: 0.75 }), mA = new THREE.MeshStandardMaterial({ map: tA, roughness: 0.9 });
 
 function buildMenuBackdrop() {
-    clr(); st = "MENU"; setLampHum(false); scene.fog = new THREE.FogExp2(0x181509, 0.042);
+    clr(); st = "MENU"; setLampHum(false);
+    scene.background = new THREE.Color(0x3b3519);
+    scene.fog = new THREE.FogExp2(0x3b3519, 0.018);
     rig.position.set(0, 1.65, 4.5); yaw = 0.08; pitch = 0;
-    box(0, -0.1, -6, 26, 0.2, 30, mF, false);
-    box(0, 3.3, -6, 26, 0.2, 30, mCeil, false);
+
+    addBrightCeilingLight(1.85);
+    box(0, -0.1, -6, 26, 0.2, 30, mF);
+    box(0, 3.3, -6, 26, 0.2, 30, mCeil);
     box(-6.5, 1.6, -6, 0.4, 3.2, 30, mW);
     box(6.5, 1.6, -6, 0.4, 3.2, 30, mW);
     box(0, 1.6, -18, 26, 3.2, 0.4, mW);
     box(-2.4, 1.6, -2.5, 0.9, 3.2, 0.9, mW);
     box(2.6, 1.6, -5.5, 0.9, 3.2, 0.9, mW);
     box(-1.5, 1.6, -10.5, 4.5, 3.2, 0.4, mW);
-    addL(0, 2.95, 1.5, 0xfef9c3, 1.15, 18);
-    addL(-1.5, 2.95, -6.5, 0xfef9c3, 1.0, 18);
+
+    addL(0, 2.95, 2.2, 0xfffef0, 2.8, 28);
+    addL(-1.5, 2.95, -5.5, 0xfffef0, 2.5, 28);
+    addL(2.0, 2.95, -11.5, 0xfffef0, 2.2, 28);
 }
 
 const levelNames = [
@@ -447,9 +432,14 @@ function drinkWater() {
     addChatMsg("Выпили миндальную воду! Рассудок восстановлен", "#7dd3fc");
 }
 function lvl0() {
-    clr(); st = "L0"; setLampHum(true); rig.position.set(0, 1.65, 0); yaw = pitch = 0;
-    box(0, -0.1, -5, 26, 0.2, 18, mF, false); box(-6, -0.1, -18, 10, 0.2, 8, mF, false); box(6, -0.1, -18, 10, 0.2, 8, mF, false);
-    box(0, -0.1, -15, 2, 0.2, 2, mF, false); box(0, -0.1, -21, 2, 0.2, 2, mF, false); box(0, 3.3, -10, 32, 0.2, 32, mCeil, false);
+    clr(); st = "L0";
+    scene.background = new THREE.Color(0x3a3418);
+    scene.fog = new THREE.FogExp2(0x3a3418, 0.02);
+    rig.position.set(0, 1.65, 0); yaw = pitch = 0;
+
+    addBrightCeilingLight(1.85);
+    box(0, -0.1, -5, 26, 0.2, 18, mF); box(-6, -0.1, -18, 10, 0.2, 8, mF); box(6, -0.1, -18, 10, 0.2, 8, mF);
+    box(0, -0.1, -15, 2, 0.2, 2, mF); box(0, -0.1, -21, 2, 0.2, 2, mF); box(0, 3.3, -10, 32, 0.2, 32, mCeil);
     box(0, 1.6, 3.5, 22, 3.2, 0.4, mW); box(-11, 1.6, -9, 0.4, 3.2, 26, mW); box(11, 1.6, -9, 0.4, 3.2, 26, mW);
     box(-4, 1.6, -4, 0.4, 3.2, 8, mW); box(4, 1.6, -5, 0.4, 3.2, 7, mW);
     box(-7.5, 1.6, -13.5, 6.5, 3.2, 0.5, mW); box(-3.2, 1, -13.5, 2, 2, 0.5, mW); box(-3.2, 2.9, -13.5, 2, 0.6, 0.5, mW);
@@ -462,27 +452,38 @@ function lvl0() {
         s.visible = false; sps.push(s);
     }
 
-    box(0, -4.2, -18, 28, 0.3, 24, mF, false); box(0, -2.6, -14, 26, 3.2, 0.4, mW); box(0, -2.6, -22, 26, 3.2, 0.4, mW);
+    box(0, -4.2, -18, 28, 0.3, 24, mF); box(0, -2.6, -14, 26, 3.2, 0.4, mW); box(0, -2.6, -22, 26, 3.2, 0.4, mW);
     box(-3, -2.4, -14.25, 1.2, 0.8, 0.05, mA); box(4, -2.4, -14.25, 1.2, 0.8, 0.05, mA);
     box(11.5, -3.2, -18, 2.5, 1.8, 2.5, new THREE.MeshStandardMaterial({ color: 0x57534e, roughness: 0.85 }));
 
     const bac = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 2.3, 10), new THREE.MeshStandardMaterial({ color: 0x09090b }));
     bac.position.set(-10, -3, -18); bac.visible = false; wg.add(bac);
 
-    addL(0, 3, -3); addL(0, 3, -16);
+    addL(0, 3.0, -2, 0xfffef0, 2.8, 30);
+    addL(-6, 3.0, -9, 0xfffef0, 2.5, 30);
+    addL(6, 3.0, -9, 0xfffef0, 2.5, 30);
+    addL(0, 3.0, -17, 0xfffef0, 2.6, 30);
+    addL(0, -1.2, -18, 0xfffef0, 2.4, 30);
+
     spIt("ladder", -7.5, 0.2, -1.5); spIt("ladder", 7.5, 0.2, -8.5); spIt("ladder", 1.2, 0.2, -2);
     spIt("key", -3.2, 2.25, -13.4); spIt("water", -7, 0.2, -9);
 
     ld = { sps, pl: 0, d0, op: false, pit: false, bac };
+    setLampHum(true);
     addChatMsg("Уровень 0: Соберите 3 части лестницы под нишу с ключом");
 }
 
 function lvl1() {
-    unlk(1); clr(); st = "L1"; setLampHum(false); rig.position.set(0, 1.65, 8); yaw = pitch = 0;
+    unlk(1); clr(); st = "L1"; setLampHum(false);
+    scene.background = new THREE.Color(0x283242);
+    scene.fog = new THREE.FogExp2(0x283242, 0.02);
+    rig.position.set(0, 1.65, 8); yaw = pitch = 0;
+
+    addBrightCeilingLight(1.65);
     const fl = new THREE.MeshStandardMaterial({ color: 0x262f3d, roughness: 0.9, metalness: 0.0 });
-    box(0, -0.1, -6, 24, 0.2, 34, fl, false); box(0, 3.4, -6, 24, 0.2, 34, mC, false);
+    box(0, -0.1, -6, 24, 0.2, 34, fl); box(0, 3.4, -6, 24, 0.2, 34, mC);
     box(0, 1.6, 10, 24, 3.2, 0.4, mC); box(0, 1.6, -22, 24, 3.2, 0.4, mC);
-    addL(0, 3.2, 2, 0xe2e8f0); addL(0, 3.2, -12, 0xe2e8f0);
+    addL(0, 3.1, 4, 0xf8fafc, 2.6, 32); addL(0, 3.1, -8, 0xf8fafc, 2.6, 32); addL(0, 3.1, -18, 0xf8fafc, 2.5, 32);
 
     const cols = [{ n: "КРАСНЫЙ", h: "#ef4444", c: 0xef4444 }, { n: "СИНИЙ", h: "#3b82f6", c: 0x3b82f6 }, { n: "ЗЕЛЁНЫЙ", h: "#22c55e", c: 0x22c55e }, { n: "ЖЁЛТЫЙ", h: "#eab308", c: 0xeab308 }].sort(() => Math.random() - 0.5);
     const pos = [{ x: -7, z: 4 }, { x: 7, z: 4 }, { x: -7, z: -4 }, { x: 7, z: -4 }, { x: -7, z: -12 }, { x: 7, z: -12 }];
@@ -514,9 +515,10 @@ function lvl1() {
 }
 function lvl2() {
     unlk(2); clr(); st = "L2"; rig.position.set(0, 1.65, 9); yaw = pitch = 0;
+    addBrightCeilingLight(1.65);
     const fl = new THREE.MeshStandardMaterial({ color: 0x262f3d, roughness: 0.9 });
-    box(0, -0.1, -5, 24, 0.2, 32, fl, false); box(0, 3.4, -5, 24, 0.2, 32, mC, false);
-    addL(0, 3.2, 2, 0xe2e8f0); addL(0, 3.2, -12, 0xe2e8f0);
+    box(0, -0.1, -5, 24, 0.2, 32, fl); box(0, 3.4, -5, 24, 0.2, 32, mC);
+    addL(0, 3.1, 4, 0xf8fafc, 2.6, 32); addL(0, 3.1, -10, 0xf8fafc, 2.6, 32);
 
     [{ x: -7, z: 4 }, { x: 7, z: 4 }, { x: -7, z: -4 }, { x: 7, z: -4 }, { x: -7, z: -11 }].forEach((p) => {
         box(p.x, 1.6, p.z - 2.2, 5, 3.2, 0.3, mC); box(p.x, 1.6, p.z + 2.2, 5, 3.2, 0.3, mC);
@@ -524,7 +526,7 @@ function lvl2() {
         spIt("key", p.x, 0.4, p.z);
     });
 
-    box(0, 0.01, -18, 8, 0.2, 6, new THREE.MeshStandardMaterial({ color: 0xdbeafe, roughness: 0.8 }), false);
+    box(0, 0.01, -18, 8, 0.2, 6, new THREE.MeshStandardMaterial({ color: 0xdbeafe, roughness: 0.8 }));
     const dr = box(0, 1.4, -15, 2, 2.8, 0.2, mG);
     box(0, 1.4, -21, 1.6, 2.6, 0.25, new THREE.MeshStandardMaterial({ color: 0x1e293b }));
     addB(-1.5, 1.5, -15.3, 0.85, 0.42, "ЗАКРЫТЬ", "#ef4444", "#fff", () => { dr.position.x = 0; addChatMsg("Шлюз закрыт!"); }, "Кнопка шлюза");
@@ -538,19 +540,23 @@ function lvl2() {
 
 function lvl3() {
     unlk(3); clr(); st = "L3"; rig.position.set(0, 1.65, 8); yaw = pitch = 0;
-    scene.fog = new THREE.FogExp2(0x050507, 0.11);
+    scene.background = new THREE.Color(0x0c0e14);
+    scene.fog = new THREE.FogExp2(0x0c0e14, 0.085);
     const fl = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9 });
-    box(0, -0.1, -6, 22, 0.2, 30, fl, false); box(0, 3.2, -6, 22, 0.2, 30, fl, false);
-    addL(7.5, 2.8, -17, 0xfef08a, 0.8, 10);
-    addB(7.5, 1.5, -18, 1.0, 0.6, "ЛИФТ", "#c8a951", "#12110e", () => { scene.fog = new THREE.FogExp2(0x181408, 0.038); lvl4(); }, "Вызов лифта");
-    addChatMsg("Уровень 3: Очень тёмная парковка. Найдите лифт наверх");
+    box(0, -0.1, -6, 22, 0.2, 30, fl); box(0, 3.2, -6, 22, 0.2, 30, fl);
+    addL(7.5, 2.8, -17, 0xfef08a, 1.8, 16);
+    addB(7.5, 1.5, -18, 1.0, 0.6, "ЛИФТ", "#d4b24c", "#12110e", () => { lvl4(); }, "Вызов лифта");
+    addChatMsg("Уровень 3: Тёмная парковка. Найдите лифт наверх");
 }
 
 function lvl4() {
     unlk(4); clr(); st = "L4"; rig.position.set(0, 1.65, 10); yaw = pitch = 0;
+    scene.background = new THREE.Color(0x283242);
+    scene.fog = new THREE.FogExp2(0x283242, 0.02);
+    addBrightCeilingLight(1.65);
     const fl = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.88 });
-    box(0, -0.1, -8, 26, 0.2, 38, fl, false);
-    const cl = addL(0, 3.1, -8, 0xffffff, 1.2, 35);
+    box(0, -0.1, -8, 26, 0.2, 38, fl);
+    const cl = addL(0, 3.1, -8, 0xffffff, 2.4, 38);
     const gt = box(0, 1.6, 4, 8, 3.2, 0.3, new THREE.MeshStandardMaterial({ color: 0x475569 }));
     let un = false;
     addB(-7.5, 1.5, 6, 1.1, 0.45, "ПК: ВОРОТА", "#38bdf8", "#12110e", () => { un = true; gt.visible = false; addChatMsg("Ворота открыты! Бегите мимо колонн 1–5"); }, "Терминал ворот");
@@ -590,6 +596,31 @@ renderer.domElement.onmousedown = (e) => { mDrag = true; lx = e.clientX; ly = e.
 onmouseup = () => mDrag = false;
 onmousemove = (e) => { if (mDrag && active && !padOpen) { yaw -= (e.clientX - lx) * 0.005; pitch = Math.max(-1.25, Math.min(1.25, pitch - (e.clientY - ly) * 0.005)); lx = e.clientX; ly = e.clientY; } };
 function toggleCrouch() { crouch = !crouch; document.getElementById("btn-crouch").classList.toggle("on", crouch); }
+
+const keys = {};
+window.addEventListener("keydown", (e) => {
+    if (document.activeElement.tagName === "INPUT") return;
+    keys[e.code] = true;
+    if (e.code === "KeyF" || e.code === "KeyE") doInteract();
+    if (e.code === "Tab" || e.code === "KeyI") { e.preventDefault(); togglePad(); }
+    if (e.code === "KeyC") toggleCrouch();
+    if (e.code === "ShiftLeft") sprint = true;
+});
+window.addEventListener("keyup", (e) => { keys[e.code] = false; if (e.code === "ShiftLeft") sprint = false; });
+let sfxCtx = null, stepTimer = 0, entityAudioTimer = 0;
+function playTone(freq, endFreq, dur, type = "sine", vol = 0.08) {
+    try {
+        if (!sfxCtx) sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = sfxCtx.createOscillator(), g = sfxCtx.createGain();
+        o.type = type; o.frequency.setValueAtTime(freq, sfxCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), sfxCtx.currentTime + dur);
+        g.gain.setValueAtTime(vol, sfxCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, sfxCtx.currentTime + dur);
+        o.connect(g); g.connect(sfxCtx.destination);
+        o.start(); o.stop(sfxCtx.currentTime + dur + 0.02);
+    } catch (e) {}
+}
+
 function updateTargetPrompt() {
     const promptEl = document.getElementById("item-prompt");
     const btnF = document.getElementById("btn-f");
@@ -597,7 +628,6 @@ function updateTargetPrompt() {
 
     const ray = new THREE.Raycaster();
     ray.setFromCamera(new THREE.Vector2(0, 0), camera);
-
     let targetObj = null, targetLabel = "", actionFn = null;
 
     const btnHits = ray.intersectObjects(btns.map((b) => b.m));
@@ -612,12 +642,11 @@ function updateTargetPrompt() {
         if (itemHits.length) {
             const it = activeItems.find((x) => x.m === itemHits.at(0).object);
             if (it) {
-                targetObj = it.m;
-                targetLabel = it.label;
+                targetObj = it.m; targetLabel = it.label;
                 actionFn = () => {
                     if (it.tp === "key" && st === "L0" && ld.pl < 3) { addChatMsg("Слишком высоко! Нужна лестница", "#ef4444"); return; }
-                    if (it.tp === "key" && st === "L2") { it.tk = true; it.m.visible = false; ld.kc++; addChatMsg("Ключ собран: " + ld.kc + "/5"); return; }
-                    if (storeItem(it.tp)) { it.tk = true; it.m.visible = false; addChatMsg("Подобрано: " + it.label); }
+                    if (it.tp === "key" && st === "L2") { it.tk = true; it.m.visible = false; ld.kc++; playTone(520, 780, 0.14, "triangle", 0.09); addChatMsg("Ключ собран: " + ld.kc + "/5"); return; }
+                    if (storeItem(it.tp)) { it.tk = true; it.m.visible = false; playTone(520, 780, 0.14, "triangle", 0.09); addChatMsg("Подобрано: " + it.label); }
                 };
             }
         }
@@ -627,19 +656,17 @@ function updateTargetPrompt() {
         const cur = invState.main;
         if (cur === "ladder" && Math.hypot(rig.position.x + 3.2, rig.position.z + 12.5) < 2.8) {
             targetObj = ld.sps.at(0); targetLabel = "Установить ступеньку";
-            actionFn = () => { ld.sps.at(ld.pl).visible = true; ld.pl++; invState.main = null; renderInv(); addChatMsg("Ступенька установлена (" + ld.pl + "/3)"); };
+            actionFn = () => { ld.sps.at(ld.pl).visible = true; ld.pl++; invState.main = null; renderInv(); playTone(260, 420, 0.15, "triangle", 0.08); addChatMsg("Ступенька установлена (" + ld.pl + "/3)"); };
         } else if (cur === "key" && !ld.op && Math.hypot(rig.position.x + 1.5, rig.position.z + 13) < 2.4) {
             targetObj = ld.d0; targetLabel = "Открыть дверь ключом";
-            actionFn = () => { ld.op = true; invState.main = null; renderInv(); ld.d0.visible = false; addChatMsg("Дверь открыта! Впереди квадратная яма"); };
+            actionFn = () => { ld.op = true; invState.main = null; renderInv(); ld.d0.visible = false; playTone(380, 180, 0.25, "sawtooth", 0.08); addChatMsg("Дверь открыта! Впереди квадратная яма"); };
         }
     }
 
     if (targetObj) {
         btnF.classList.add("show");
         const wp = new THREE.Vector3();
-        targetObj.getWorldPosition(wp);
-        wp.y += 0.35;
-        wp.project(camera);
+        targetObj.getWorldPosition(wp); wp.y += 0.35; wp.project(camera);
         if (wp.z < 1) {
             const w = document.documentElement.clientWidth || window.innerWidth;
             const h = document.documentElement.clientHeight || window.innerHeight;
@@ -649,8 +676,7 @@ function updateTargetPrompt() {
             promptEl.classList.add("show");
         }
     } else {
-        promptEl.classList.remove("show");
-        btnF.classList.remove("show");
+        promptEl.classList.remove("show"); btnF.classList.remove("show");
     }
     return actionFn;
 }
@@ -668,6 +694,16 @@ function tick() {
         return;
     }
 
+    if (!padOpen) {
+        let kx = 0, ky = 0;
+        if (keys["KeyW"] || keys["ArrowUp"]) ky -= 1;
+        if (keys["KeyS"] || keys["ArrowDown"]) ky += 1;
+        if (keys["KeyA"] || keys["ArrowLeft"]) kx -= 1;
+        if (keys["KeyD"] || keys["ArrowRight"]) kx += 1;
+        if (kx !== 0 || ky !== 0) { const len = Math.hypot(kx, ky); joyX = kx / len; joyY = ky / len; }
+        else if (!joyId) { joyX = 0; joyY = 0; }
+    }
+
     camera.rotation.order = "YXZ";
     camera.rotation.y = yaw;
     camera.rotation.x = pitch;
@@ -683,6 +719,8 @@ function tick() {
         const fwd = -joyY * spd, str = joyX * spd;
         rig.position.x += -Math.sin(yaw) * fwd + Math.cos(yaw) * str;
         rig.position.z += -Math.cos(yaw) * fwd - Math.sin(yaw) * str;
+        stepTimer++;
+        if (stepTimer >= (isRunning ? 16 : 26)) { stepTimer = 0; playTone(110, 55, 0.09, "triangle", isRunning ? 0.08 : 0.045); }
     }
 
     idlePhase += 0.035;
@@ -717,6 +755,7 @@ function tick() {
         }
     }
 
+    entityAudioTimer++;
     if (st === "L0") {
         if (!ld.pit && ld.op && Math.abs(rig.position.x) < 1.2 && Math.abs(rig.position.z + 18) < 1.2) {
             ld.pit = true; rig.position.y = -2.35; ld.bac.visible = true;
@@ -725,14 +764,19 @@ function tick() {
         if (ld.pit) {
             const bx = rig.position.x - ld.bac.position.x, bz = rig.position.z - ld.bac.position.z, d = Math.hypot(bx, bz);
             if (d > 0.4) { ld.bac.position.x += (bx / d) * 0.042; ld.bac.position.z += (bz / d) * 0.042; }
+            if (entityAudioTimer % 28 === 0) playTone(95, 42, 0.25, "sawtooth", Math.min(0.18, 0.45 / Math.max(1, d)));
             if (rig.position.x > 11) lvl1();
         }
+    } else if (st === "L2" && entityAudioTimer % 95 === 0) {
+        playTone(210, 145, 0.35, "sawtooth", 0.04);
+        setTimeout(() => playTone(165, 230, 0.28, "triangle", 0.035), 260);
     } else if (st === "L4" && !ld.fin) {
         const on = Math.sin(Date.now() * 0.002) > -0.2;
-        ld.cl.intensity = on ? 1.2 : 0.05;
+        ld.cl.intensity = on ? 2.4 : 0.08;
         if (!on && ld.un()) {
             const sx = rig.position.x - ld.sm.position.x, sz = rig.position.z - ld.sm.position.z, sd = Math.hypot(sx, sz);
             if (sd > 0.5) { ld.sm.position.x += (sx / sd) * 0.055; ld.sm.position.z += (sz / sd) * 0.055; }
+            if (entityAudioTimer % 24 === 0) playTone(880, 1250, 0.18, "sine", Math.min(0.14, 0.35 / Math.max(1, sd)));
         }
         if (Math.hypot(rig.position.x - 5, rig.position.z + 18.5) < 1.5) {
             ld.fin = true; document.getElementById("end").classList.add("on"); setTimeout(toTermMenu, 6500);
