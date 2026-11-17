@@ -651,14 +651,13 @@ if(fr.visible){fr.position.lerp(fr.userData.tp,.18);fr.rotation.y+=(fr.userData.
 
 entityAudioTimer++;
 if(st==="L0"){
-if(!ld.pit){for(let h of ld.pitHoles)if(Math.hypot(rig.position.x-h.x,rig.position.z-h.z)<h.r){ld.pit=true;rig.position.y=-2.35;ld.bac.visible=true;break}}
-if(ld.pit){const bx=rig.position.x-ld.bac.position.x,bz=rig.position.z-ld.bac.position.z,d=Math.hypot(bx,bz);if(d>.4){ld.bac.position.x+=bx/d*.044;ld.bac.position.z+=bz/d*.044}if(entityAudioTimer%26===0)playTone(95,42,.25,"sawtooth",Math.min(.18,.45/Math.max(1,d)));if(dplayTone(165,230,.28,"triangle",.035),260)}
-else if(st==="L4"&&!ld.fin){
-const on=Math.sin(Date.now()*.002)>-.2;ld.cl.intensity=on?1.35:.04;
-const inSafeRoom=Math.abs(rig.position.x)>6.2;
-if(!on&&!inSafeRoom){const sx=rig.position.x-ld.sm.position.x,sz=rig.position.z-ld.sm.position.z,sd=Math.hypot(sx,sz);if(sd>.4){ld.sm.position.x+=sx/sd*.06;ld.sm.position.z+=sz/sd*.06}if(entityAudioTimer%22===0)playTone(880,1250,.18,"sine",Math.min(.14,.35/Math.max(1,sd)));if(sd<.85){addChatMsg("Улыбашка поймала вас в темноте! Двери перемешаны заново","#ef4444");lvl4()}}
+  if(!ld.pit){for(let h of ld.pitHoles)if(Math.hypot(rig.position.x-h.x,rig.position.z-h.z)<h.r){ld.pit=true;rig.position.y=-2.35;ld.bac.visible=true;break}}
+  if(ld.pit){const bx=rig.position.x-ld.bac.position.x,bz=rig.position.z-ld.bac.position.z,d=Math.hypot(bx,bz);if(d>.4){ld.bac.position.x+=bx/d*.044;ld.bac.position.z+=bz/d*.044}if(entityAudioTimer%26===0)playTone(95,42,.25,"sawtooth",Math.min(.18,.45/Math.max(1,d)));if(dplayTone(165,230,.28,"triangle",.035),260)
+}else if(st==="L4"&&!ld.fin){
+  const on=Math.sin(Date.now()*.002)>-.2;ld.cl.intensity=on?1.35:.04;
+  const inSafeRoom=Math.abs(rig.position.x)>6.2;
+  if(!on&&!inSafeRoom){const sx=rig.position.x-ld.sm.position.x,sz=rig.position.z-ld.sm.position.z,sd=Math.hypot(sx,sz);if(sd>.4){ld.sm.position.x+=sx/sd*.06;ld.sm.position.z+=sz/sd*.06}if(entityAudioTimer%22===0)playTone(880,1250,.18,"sine",Math.min(.14,.35/Math.max(1,sd)));if(sd<.85){addChatMsg("Улыбашка поймала вас в темноте! Двери перемешаны заново","#ef4444");lvl4()}}
 }
-
 if(bst>0)bst--;if(st.startsWith("L"))san=Math.max(0,san-.006);
 const rt=san/100,col=rt>.5?"#22c55e":rt>.25?"#eab308":"#ef4444";
 document.getElementById("san-fill").style.height=Math.max(5,rt*100)+"%";document.getElementById("san-fill").style.background=col;document.getElementById("san-pct").style.color=col;document.getElementById("san-pct").innerText=Math.ceil(san)+"%";
