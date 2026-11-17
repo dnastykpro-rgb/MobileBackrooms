@@ -235,9 +235,9 @@ const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.05,130),rig=
 
 // Улучшенная графика: мягкие тени PCFSoftShadowMap и киношный тонмаппинг ACESFilmic с бликами
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
-document.body.appendChild(renderer.domElement);
+renderer.shadowMap.enabled=false;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.18;
 
 function updateViewportQuality(){const w=document.documentElement.clientWidth||innerWidth,h=document.documentElement.clientHeight||innerHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2.2));renderer.setSize(w,h,false);}
 updateViewportQuality();addEventListener("resize",updateViewportQuality);addEventListener("orientationchange",()=>setTimeout(updateViewportQuality,120));
@@ -413,16 +413,16 @@ function backToMain(){document.querySelectorAll(".sub-scr").forEach(s=>s.classLi
 function pickSuit(col){suitCol=col;slvMat.color.setHex(col);backToMain();}
 
 function enterLobby(mode){
-  lobMode=mode;isHost=true;lobPlayers={};lobSelLvl=0;code=""+Math.floor(1e3+Math.random()*9e3);
-  document.getElementById("lob-code-txt").innerText=code;document.getElementById("lob-log").innerHTML="";
+  lobMode=mode;isHost=true;lobPlayers={};lobSelLvl=0;
+  code=""+Math.floor(1e3+Math.random()*9e3);
+  document.getElementById("lob-code-txt").innerText=code;
+  document.getElementById("lob-log").innerHTML="";
   document.getElementById("btn-lob-start").style.display="block";
   document.getElementById("btn-lob-save").style.display=mode==="STORY"?"block":"none";
   document.getElementById("btn-lob-save").innerText="СЕКТОР: УРОВЕНЬ 0";
   document.querySelectorAll(".sub-scr").forEach(s=>s.classList.remove("on"));
   document.getElementById("scr-lobby").classList.add("on");
-  const initLvl=mode==="HUB"?"HUB":"L0";
-  fetch(`${DB}/rooms/${code}.json`,{method:"PUT",body:JSON.stringify({level:initLvl,started:false})}).catch(()=>{});
-  connRoom(code);renderLobbySlots();
+  renderLobbySlots();
 }
 function joinFriendLobby(){
   const c=document.getElementById("join-code").value.trim();if(c.length!==4)return;
@@ -445,10 +445,13 @@ function launchExpedition(){
   document.getElementById("hud").style.display="block";
   const rt=document.getElementById("room-tag");
   if(coop){rt.style.display="block";document.getElementById("rc").innerText=code;}else{rt.style.display="none";}
-  active=true;invState={main:null,p0:null,p1:null,bp:new Array(9).fill(null)};renderInv();
-  if(code)fetch(`${DB}/rooms/${code}.json`,{method:"PATCH",body:JSON.stringify({level:lc,started:true})}).catch(()=>{});
-  const mapFns={L0:lvl0,L1:lvl1,L2:lvl2,L3:lvl3,HUB:lvlHub,L4:lvl4};
-  (mapFns[lc]||lvl0)();
+  active=true;
+  invState={main:null,p0:null,p1:null,bp:new Array(9).fill(null)};
+  renderInv();
+  setTimeout(()=>{
+    const mapFns={L0:lvl0,L1:lvl1,L2:lvl2,L3:lvl3,HUB:lvlHub,L4:lvl4};
+    (mapFns[lc]||lvl0)();
+  },30);
 }
 function startExpeditionClient(lc){
   document.getElementById("main-menu").classList.remove("on");
