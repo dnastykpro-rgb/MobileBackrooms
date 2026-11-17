@@ -5,121 +5,178 @@
 <title>Mobile The Backrooms</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;user-select:none;touch-action:none}
-body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:100vh}
-#main-menu{position:fixed;inset:0;z-index:100;background:linear-gradient(90deg,rgba(12,11,8,.78) 0%,rgba(12,11,8,.28) 55%,rgba(12,11,8,.42) 100%);display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:24px 32px}
-#main-menu.off{display:none}
-.m-header{text-align:left}
-.m-title{color:#f5f0dc;font-size:28px;font-weight:900;letter-spacing:2px;text-transform:uppercase;text-shadow:0 3px 14px rgba(0,0,0,.95)}
-.m-title .inf{color:#e0be53;font-size:inherit;font-weight:inherit;line-height:inherit;display:inline}
-.m-sub{color:#c2bca6;font-size:10px;letter-spacing:2.2px;margin-top:4px;text-transform:uppercase;text-shadow:0 2px 6px #000}
-.m-dock{width:235px;background:rgba(18,17,14,.76);border:1px solid rgba(224,190,83,.42);padding:10px;display:flex;flex-direction:column;gap:8px;box-shadow:0 12px 35px rgba(0,0,0,.75);backdrop-filter:blur(3px)}
-.m-nick{width:100%;background:#12110e;border:1px solid rgba(224,190,83,.45);border-radius:0;color:#f5f0dc;padding:9px 11px;font-size:12px;font-weight:700;outline:none;touch-action:auto}
-.m-btn{width:100%;background:#23211b;color:#f5f0dc;border:none;border-left:4px solid rgba(224,190,83,.65);border-radius:0;padding:10px 12px;text-align:left;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .15s,padding-left .15s}
-.m-btn.primary{background:#d4b24c;color:#12110e;border-left:4px solid #fff}
-.m-btn:active{background:#f5f0dc;color:#12110e;padding-left:16px}
-.win-overlay{position:fixed;inset:0;z-index:110;background:rgba(8,7,5,.75);display:flex;justify-content:center;align-items:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .28s ease}
-.win-overlay.open{opacity:1;pointer-events:auto}
-.win-box{width:100%;max-width:520px;background:#161511;border:1.5px solid #d4b24c;border-radius:0;padding:16px;color:#f5f0dc;transform:translateY(28px) scale(.96);transition:transform .3s cubic-bezier(.16,1,.3,1)}
-.win-overlay.open .win-box{transform:translateY(0) scale(1)}
-.win-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(212,178,76,.3);padding-bottom:8px;margin-bottom:12px}
-.win-top h2{font-size:14px;letter-spacing:1.2px;text-transform:uppercase;color:#d4b24c}
-.save-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-bottom:12px}
-.save-slot{background:#1f1d17;border:1px solid rgba(255,255,255,.15);border-radius:0;padding:10px;text-align:left;cursor:pointer}
-.save-slot.unlocked{border-color:rgba(212,178,76,.6)}
-.save-slot.unlocked:active{background:#d4b24c;color:#12110e}
-.save-slot.locked{opacity:.45}
-.save-slot b{display:block;font-size:12px;margin-bottom:3px;color:#f5f0dc}
-.save-slot span{font-size:10px;color:#a39e8c}
-.win-in{width:100%;background:#12110e;border:1px solid #d4b24c;border-radius:0;color:#f5f0dc;padding:9px;font-size:14px;font-weight:bold;text-align:center;margin-bottom:8px;outline:none;touch-action:auto}
+body{overflow:hidden;background:#000}canvas{display:block;width:100vw;height:100vh}
+
+/* Полностью чёрный экран заставки и дисклеймера */
+#intro-scr{position:fixed;inset:0;z-index:200;background:#000000;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center;transition:opacity .5s ease}
+#intro-scr.off{opacity:0;pointer-events:none}
+#intro-logo{font-size:30px;font-weight:900;letter-spacing:3px;color:#e2e8f0;text-transform:uppercase;animation:fadeIn 1.2s ease}
+#intro-logo .inf{color:#7dd3fc}
+#intro-warn{display:none;max-width:520px;color:#e2e8f0;font-size:15px;line-height:1.6;letter-spacing:.5px;animation:fadeIn .5s ease}
+#intro-warn b{color:#7dd3fc;display:block;font-size:18px;letter-spacing:2px;margin-bottom:8px}
+#intro-tap{display:none;position:fixed;left:22px;bottom:18px;color:#cbd5e1;font-size:12px;font-weight:700;letter-spacing:.8px;animation:blinkTap 1.6s infinite}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes blinkTap{0%,100%{opacity:.95}50%{opacity:.35}}
+
+/* Главное меню: сероватый полупрозрачный прямоугольник и бело-сероватые кнопки с лёгко-голубой подсветкой */
+#main-menu{position:fixed;inset:0;z-index:100;background:linear-gradient(90deg,rgba(10,11,14,.72) 0%,rgba(10,11,14,.2) 60%,rgba(10,11,14,.42) 100%);display:none;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:24px 30px}
+#main-menu.on{display:flex}
+.m-title{color:#f1f5f9;font-size:27px;font-weight:900;letter-spacing:2px;text-transform:uppercase;text-shadow:0 3px 14px rgba(0,0,0,.9)}
+.m-title .inf{color:#7dd3fc;font-size:inherit;font-weight:inherit;display:inline}
+.m-sub{color:#94a3b8;font-size:10px;letter-spacing:2.2px;margin-top:3px;text-transform:uppercase}
+
+.m-panel{width:255px;background:rgba(148,163,184,.24);border:1px solid rgba(203,213,225,.32);border-radius:0;backdrop-filter:blur(6px);padding:12px;display:flex;flex-direction:column;gap:8px;box-shadow:0 12px 32px rgba(0,0,0,.65)}
+.m-nick{width:100%;background:linear-gradient(180deg,#f8fafc,#cbd5e1);border:1px solid #64748b;border-radius:0;color:#0f172a;padding:9px 11px;font-size:12px;font-weight:800;outline:none;touch-action:auto}
+.m-btn{width:100%;background:linear-gradient(180deg,#f1f5f9 0%,#cbd5e1 100%);color:#0f172a;border:1px solid #64748b;border-radius:0;padding:11px 14px;text-align:left;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .15s,box-shadow .15s}
+.m-btn:hover,.m-btn:active{background:linear-gradient(180deg,#e0f2fe 0%,#bae6fd 100%);border-color:#38bdf8;box-shadow:0 0 14px rgba(125,211,252,.75);color:#0c4a6e}
+/* Выбор режима и авторское Лобби без скруглений */
+.sub-scr{position:fixed;inset:0;z-index:110;background:rgba(12,14,18,.84);backdrop-filter:blur(6px);display:none;flex-direction:column;justify-content:space-between;padding:20px 26px}
+.sub-scr.on{display:flex}
+.sub-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(203,213,225,.25);padding-bottom:10px}
+.sub-head h2{color:#f1f5f9;font-size:18px;letter-spacing:2px;text-transform:uppercase}
+.mode-cards{display:flex;justify-content:center;align-items:center;gap:20px;flex:1;flex-wrap:wrap}
+.mode-card{width:230px;background:rgba(148,163,184,.22);border:1px solid #64748b;border-radius:0;padding:12px;cursor:pointer;transition:.18s;text-align:center}
+.mode-card:hover,.mode-card:active{background:rgba(186,230,253,.3);border-color:#7dd3fc;box-shadow:0 0 18px rgba(125,211,252,.5)}
+.mode-prev{height:110px;margin-bottom:10px;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;letter-spacing:1.5px;color:#f8fafc}
+.mode-card b{display:block;background:linear-gradient(180deg,#f1f5f9,#cbd5e1);color:#0f172a;padding:7px;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+
+.lobby-grid{display:flex;gap:18px;flex:1;padding:14px 0;min-height:0}
+.lob-left,.lob-right{flex:1;background:rgba(148,163,184,.18);border:1px solid #64748b;border-radius:0;padding:14px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}
+.slot-list{display:flex;flex-direction:column;gap:6px}
+.p-slot{background:rgba(15,23,42,.75);border:1px solid #475569;border-radius:0;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;color:#f1f5f9;font-size:12px;font-weight:700}
+.p-slot.empty{opacity:.4}
+.badge-rdy{background:#bae6fd;color:#0c4a6e;padding:2px 8px;font-size:10px;font-weight:900}
+.code-banner{background:rgba(15,23,42,.85);border:1px solid #64748b;border-radius:0;padding:10px;text-align:center;color:#e2e8f0;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer}
+.code-banner span{color:#7dd3fc;font-size:17px}
+.lob-chat{height:76px;background:rgba(15,23,42,.68);border:1px solid #475569;border-radius:0;padding:6px;display:flex;flex-direction:column;justify-content:space-between}
+.lob-log{flex:1;overflow-y:auto;font-size:10.5px;color:#e2e8f0;display:flex;flex-direction:column;gap:2px}
+.lob-row{display:flex;gap:4px;margin-top:4px}
+.lob-row input{flex:1;background:#f1f5f9;border:none;border-radius:0;color:#0f172a;padding:4px 7px;font-size:11px;font-weight:700;outline:none;touch-action:auto}
+
+/* Игровой экран (HUD): тёмно-серые кнопки без цветных обводок с лёгким скруглением 6px */
 #hud{position:fixed;inset:0;pointer-events:none;display:none}
-#chat-box{position:fixed;top:10px;left:10px;width:215px;background:rgba(14,13,10,.45);border:1px solid rgba(212,178,76,.28);border-radius:8px;padding:6px;z-index:35;pointer-events:auto;transition:opacity .7s ease}
+#chat-box{position:fixed;top:10px;left:10px;width:215px;background:rgba(24,26,30,.58);border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:6px;z-index:35;pointer-events:auto;transition:opacity .7s ease}
 #chat-box.fade{opacity:.18}#chat-box:focus-within{opacity:1!important}
-#chat-log{height:46px;overflow-y:auto;font-size:10px;color:#f5f5f4;display:flex;flex-direction:column;gap:2px;margin-bottom:4px;text-shadow:0 1px 2px #000}
+#chat-log{height:46px;overflow-y:auto;font-size:10px;color:#f1f5f9;display:flex;flex-direction:column;gap:2px;margin-bottom:4px;text-shadow:0 1px 2px #000}
 #chat-row{display:flex;gap:4px}
-#chat-in{flex:1;min-width:0;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:4px 6px;border-radius:4px;outline:none;touch-action:auto}
-#chat-ent{background:#b4923e;color:#12110e;border:none;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:800;cursor:pointer}
+#chat-in{flex:1;min-width:0;background:rgba(15,17,20,.7);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;padding:4px 6px;border-radius:4px;outline:none;touch-action:auto}
+#chat-ent{background:#33373d;color:#e2e8f0;border:none;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:800;cursor:pointer}
 #item-prompt{display:none;position:fixed;z-index:25;pointer-events:none;transform:translate(-50%,-100%);flex-direction:column;align-items:center;gap:4px}
 #item-prompt.show{display:flex}
-.ip-card{background:rgba(255,255,255,.95);color:#111;padding:5px 12px;border-radius:10px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.5);white-space:nowrap}
-.ip-sub{background:rgba(15,15,15,.85);color:#fef08a;padding:2px 9px;border-radius:6px;font-size:10.5px;font-weight:800;border:1px solid rgba(255,255,255,.25)}
-#room-tag{display:none;position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(18,17,14,.88);border:1px solid #d4b24c;padding:5px 12px;color:#d4b24c;font-size:11px;font-weight:800;z-index:35}
-#btn-menu{position:fixed;top:10px;right:10px;background:rgba(24,23,19,.85);color:#f5f0dc;border:1px solid rgba(212,178,76,.45);padding:7px 14px;font-size:11px;font-weight:800;pointer-events:auto;z-index:35;cursor:pointer}
-#cross{position:fixed;top:50%;left:50%;width:6px;height:6px;background:rgba(255,255,255,.85);border-radius:50%;transform:translate(-50%,-50%);z-index:20;box-shadow:0 0 4px #000}
-#joy-zone{position:fixed;left:22px;bottom:22px;width:112px;height:112px;border-radius:50%;background:rgba(120,120,120,.32);border:2px solid rgba(212,178,76,.45);pointer-events:auto;z-index:30}
-#joy-stick{position:absolute;left:33px;top:33px;width:42px;height:42px;border-radius:50%;background:rgba(212,178,76,.82)}
-#mini-hud{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;pointer-events:auto;z-index:30}
-.m-hand{width:50px;height:50px;background:rgba(18,17,14,.84);border:1.5px solid #d4b24c;border-radius:8px;display:flex;justify-content:center;align-items:center;color:#f5f0dc;font-size:10px;font-weight:bold;text-align:center}
-#btn-bag{height:50px;padding:0 12px;background:rgba(28,26,21,.9);color:#d4b24c;border:1.5px solid rgba(212,178,76,.45);border-radius:8px;font-size:10.5px;font-weight:800;cursor:pointer}
-#btn-f{display:none;position:fixed;right:22px;bottom:168px;width:52px;height:52px;border-radius:14px;background:rgba(28,28,28,.9);color:#f5f5f4;border:1.5px solid rgba(255,255,255,.28);font-size:19px;font-weight:900;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+.ip-card{background:rgba(255,255,255,.95);color:#0f172a;padding:5px 12px;border-radius:10px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.5);white-space:nowrap}
+.ip-sub{background:rgba(24,26,30,.88);color:#e2e8f0;padding:2px 9px;border-radius:6px;font-size:10.5px;font-weight:800}
+
+#room-tag{display:none;position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(28,30,34,.85);border-radius:6px;padding:5px 12px;color:#cbd5e1;font-size:11px;font-weight:800;z-index:35}
+#btn-menu{position:fixed;top:10px;right:10px;background:rgba(32,34,38,.86);color:#cbd5e1;border:none;border-radius:6px;padding:8px 14px;font-size:11px;font-weight:800;pointer-events:auto;z-index:35;cursor:pointer}
+#cross{position:fixed;top:50%;left:50%;width:5px;height:5px;background:rgba(255,255,255,.8);border-radius:50%;transform:translate(-50%,-50%);z-index:20}
+
+/* Монохромный серый джойстик без цветных обводок */
+#joy-zone{position:fixed;left:22px;bottom:22px;width:112px;height:112px;border-radius:50%;background:rgba(60,63,68,.35);border:1.5px solid rgba(140,145,152,.35);pointer-events:auto;z-index:30}
+#joy-stick{position:absolute;left:33px;top:33px;width:42px;height:42px;border-radius:50%;background:rgba(130,135,142,.75)}
+
+/* Тёмно-серые кнопки управления справа без цветных обводок (лёгкое скругление 6px) */
+#btn-f{display:none;position:fixed;right:22px;bottom:164px;width:54px;height:54px;border-radius:6px;background:rgba(32,34,38,.88);color:#cbd5e1;border:none;font-size:19px;font-weight:900;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
 #btn-f.show{display:flex}
-#btn-drink{display:none;position:fixed;right:86px;bottom:146px;width:46px;height:46px;border-radius:50%;background:rgba(14,165,233,.9);color:#fff;border:none;font-size:18px;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-bag-r{position:fixed;right:92px;bottom:92px;width:52px;height:52px;border-radius:6px;background:rgba(32,34,38,.88);color:#cbd5e1;border:none;display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-drink{display:none;position:fixed;right:92px;bottom:154px;width:52px;height:44px;border-radius:6px;background:rgba(32,34,38,.88);color:#cbd5e1;border:none;font-size:16px;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
 #btn-drink.show{display:flex}
-#btn-crouch{position:fixed;right:100px;bottom:24px;width:50px;height:50px;border-radius:14px;background:rgba(24,24,24,.88);border:1.5px solid rgba(255,255,255,.2);display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
-#btn-sprint{position:fixed;right:20px;bottom:74px;width:66px;height:66px;border-radius:16px;background:rgba(24,24,24,.88);border:2px solid #d4b24c;display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
-#btn-crouch.on,#btn-sprint:active,#btn-f:active{background:#d4b24c;color:#12110e}
-#pad-screen{display:none;position:fixed;inset:0;z-index:90;background:rgba(10,9,6,.82);backdrop-filter:blur(5px);flex-direction:column;justify-content:space-between;padding:16px 22px;pointer-events:auto}
+#btn-crouch{position:fixed;right:92px;bottom:24px;width:52px;height:52px;border-radius:6px;background:rgba(32,34,38,.88);border:none;display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-sprint{position:fixed;right:20px;bottom:76px;width:62px;height:62px;border-radius:6px;background:rgba(32,34,38,.88);border:none;display:flex;justify-content:center;align-items:center;pointer-events:auto;z-index:30;cursor:pointer}
+#btn-crouch.on,#btn-sprint:active,#btn-f:active,#btn-bag-r:active,#btn-drink:active{background:#4b5563}
+
+/* Окно инвентаря (строгое без скруглений и цветных рамок) */
+#pad-screen{display:none;position:fixed;inset:0;z-index:90;background:rgba(12,13,15,.86);backdrop-filter:blur(5px);flex-direction:column;justify-content:space-between;padding:16px 22px;pointer-events:auto}
 #pad-screen.on{display:flex}
 .pad-head{display:flex;justify-content:flex-end}
-.pad-title{background:linear-gradient(270deg,rgba(212,178,76,.92),rgba(212,178,76,.15));color:#12110e;padding:6px 24px 6px 42px;border-radius:6px;font-size:15px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}
+.pad-title{background:rgba(71,85,105,.65);color:#f1f5f9;padding:6px 24px 6px 42px;font-size:15px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}
 .pad-body{display:flex;justify-content:center;align-items:center;gap:18px;flex:1}
-.pad-col{background:rgba(24,22,17,.82);border:1px solid rgba(212,178,76,.35);border-radius:10px;padding:9px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.pad-lbl{background:rgba(212,178,76,.2);border:1px solid rgba(212,178,76,.5);color:#f5f0dc;font-size:9px;font-weight:900;padding:3px 8px;border-radius:4px;width:96px;text-align:center}
-.p-cell{width:50px;height:50px;background:#14130f;border:1.5px solid rgba(255,255,255,.16);border-radius:8px;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#f5f5f4;font-size:9.5px;font-weight:bold;text-align:center;cursor:pointer}
-.p-cell.act{border-color:#d4b24c;background:rgba(212,178,76,.16)}
-.bp-grid{display:grid;grid-template-columns:repeat(3,50px);gap:5px;background:rgba(24,22,17,.82);padding:9px;border:1px solid rgba(212,178,76,.35);border-radius:10px}
-.san-box{width:100px;height:198px;background:rgba(24,22,17,.88);border:1.5px solid rgba(212,178,76,.4);border-radius:10px;padding:9px;display:flex;flex-direction:column;justify-content:space-between;align-items:center}
-.san-tube{width:32px;height:120px;background:#0c0b08;border:1.5px solid rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden;padding:2px}
-#san-fill{width:100%;height:100%;background:#22c55e;border-radius:6px;transition:height .25s,background .25s}
-.pad-foot{display:flex;justify-content:space-between;align-items:center;color:#a39e8c;font-size:10.5px;font-weight:700}
-#end{position:fixed;inset:0;z-index:150;background:rgba(8,7,4,.96);display:none;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center}
-#end.on{display:flex}#end h2{color:#d4b24c;font-size:19px;line-height:1.5;max-width:480px}
+.pad-col{background:rgba(30,32,36,.88);border:1px solid #475569;padding:9px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pad-lbl{background:rgba(71,85,105,.45);color:#e2e8f0;font-size:9px;font-weight:900;padding:3px 8px;width:96px;text-align:center}
+.p-cell{width:50px;height:50px;background:#18191c;border:1px solid #475569;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#f1f5f9;font-size:9.5px;font-weight:bold;text-align:center;cursor:pointer}
+.p-cell.act{border-color:#94a3b8;background:#272a30}
+.bp-grid{display:grid;grid-template-columns:repeat(3,50px);gap:5px;background:rgba(30,32,36,.88);padding:9px;border:1px solid #475569}
+.san-box{width:100px;height:198px;background:rgba(30,32,36,.88);border:1px solid #475569;padding:9px;display:flex;flex-direction:column;justify-content:space-between;align-items:center}
+.san-tube{width:32px;height:120px;background:#111214;border:1px solid #475569;display:flex;align-items:flex-end;overflow:hidden;padding:2px}
+#san-fill{width:100%;height:100%;background:#22c55e;transition:height .25s,background .25s}
+.pad-foot{display:flex;justify-content:space-between;align-items:center;color:#94a3b8;font-size:10.5px;font-weight:700}
+#end{position:fixed;inset:0;z-index:150;background:#09090b;display:none;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center}
+#end.on{display:flex}#end h2{color:#e2e8f0;font-size:19px;line-height:1.5;max-width:480px}
 #vig{position:fixed;inset:0;pointer-events:none;z-index:15}
 </style>
 </head>
 <body>
+<div id="intro-scr" onclick="dismissIntro()">
+<div id="intro-logo">Mobile The Backr<span class="inf">∞</span>ms</div>
+<div id="intro-warn"><b>ВНИМАНИЕ!</b>Эта игра является фанатской игрой и не является официальным продуктом.</div>
+<div id="intro-tap">Нажмите на любую область экрана, чтобы продолжить</div>
+</div>
+
 <div id="main-menu">
-<div class="m-header">
+<div>
 <div class="m-title">Mobile The Backr<span class="inf">∞</span>ms</div>
 <div class="m-sub">liminal expedition protocol</div>
 </div>
-<div class="m-dock">
+<div class="m-panel">
 <input id="inp-nick" class="m-nick" value="Agent_01" maxlength="16" placeholder="Позывной">
-<button class="m-btn primary" onclick="openWin('saves')">ИГРАТЬ</button>
-<button class="m-btn" onclick="openWin('coop')">КООПЕРАТИВ</button>
-<button class="m-btn" onclick="openWin('suit')">УНИФОРМА</button>
+<button class="m-btn" onclick="openModeSelect()">ИГРАТЬ В ИГРУ</button>
+<button class="m-btn" onclick="openSuitScreen()">УНИФОРМА</button>
+<button class="m-btn" onclick="exitToIntro()">ВЫЙТИ</button>
 </div>
 </div>
-<div id="win-saves" class="win-overlay" onclick="if(event.target===this)closeWins()">
-<div class="win-box">
-<div class="win-top"><h2>Выбор сохранения / Сектора</h2><button class="m-btn" style="width:auto;padding:5px 10px" onclick="closeWins()">✕</button></div>
-<div class="save-grid" id="save-grid"></div>
-<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#a39e8c">
-<span>Прогресс сохраняется автоматически</span>
-<button class="m-btn" style="width:auto;padding:6px 12px;font-size:10px" onclick="resetSaves()">СБРОСИТЬ ПРОГРЕСС</button>
+
+<div id="scr-mode" class="sub-scr">
+<div class="sub-head"><h2>Выбор экспедиции</h2><button class="m-btn" style="width:auto;padding:7px 14px" onclick="backToMain()">НАЗАД</button></div>
+<div class="mode-cards">
+<div class="mode-card" onclick="enterLobby('STORY')">
+<div class="mode-prev" style="background:linear-gradient(135deg,#4a451f,#24210c)">СЕКТОРЫ 0 — 4</div>
+<b>Сюжетный режим</b>
+</div>
+<div class="mode-card" onclick="enterLobby('HUB')">
+<div class="mode-prev" style="background:linear-gradient(135deg,#1e293b,#0f172a)">РАСПРЕДЕЛИТЕЛЬНЫЙ УЗЕЛ</div>
+<b>Центр (Хаб)</b>
 </div>
 </div>
-</div>
-<div id="win-coop" class="win-overlay" onclick="if(event.target===this)closeWins()">
-<div class="win-box">
-<div class="win-top"><h2>Совместная игра (Лобби)</h2><button class="m-btn" style="width:auto;padding:5px 10px" onclick="closeWins()">✕</button></div>
-<button class="m-btn primary" style="margin-bottom:10px" onclick="hostRoom()">СОЗДАТЬ ЛОББИ (ВЫ ГЛАВНЫЙ)</button>
-<div style="text-align:center;font-size:11px;color:#a39e8c;margin-bottom:6px">— ИЛИ ВВЕДИТЕ 4-ЗНАЧНЫЙ КОД ДРУГА —</div>
-<input id="join-code" class="win-in" placeholder="0000" maxlength="4">
-<button class="m-btn" onclick="joinRoom()">ПОДКЛЮЧИТЬСЯ К ЛОББИ</button>
+<div style="display:flex;gap:8px;max-width:420px;margin:0 auto;width:100%">
+<input id="join-code" class="m-nick" style="text-align:center;letter-spacing:2px" placeholder="КОД ДРУГА (4 ЦИФРЫ)" maxlength="4">
+<button class="m-btn" style="width:auto;white-space:nowrap" onclick="joinFriendLobby()">ВОЙТИ ПО КОДУ</button>
 </div>
 </div>
-<div id="win-suit" class="win-overlay" onclick="if(event.target===this)closeWins()">
-<div class="win-box">
-<div class="win-top"><h2>Униформа исследователя</h2><button class="m-btn" style="width:auto;padding:5px 10px" onclick="closeWins()">✕</button></div>
+
+<div id="scr-lobby" class="sub-scr">
+<div class="sub-head"><h2>Лобби экспедиции</h2><button class="m-btn" style="width:auto;padding:7px 14px" onclick="leaveLobby()">ВЫЙТИ ИЗ ЛОББИ</button></div>
+<div class="lobby-grid">
+<div class="lob-left">
+<div>
+<div style="color:#cbd5e1;font-size:11px;font-weight:800;margin-bottom:8px;letter-spacing:1px">УЧАСТНИКИ ГРУППЫ (1–4)</div>
+<div class="slot-list" id="lob-slots"></div>
+</div>
+<div class="lob-chat">
+<div class="lob-log" id="lob-log"></div>
+<div class="lob-row"><input id="lob-in" placeholder="Чат лобби..." maxlength="60"><button class="m-btn" style="width:auto;padding:4px 10px;font-size:10px" onclick="sendLobbyChat()">Enter</button></div>
+</div>
+</div>
+<div class="lob-right">
+<div class="code-banner" onclick="copyLobbyCode()">КОД ПРИГЛАШЕНИЯ: <span id="lob-code-txt">----</span><div style="font-size:9px;color:#94a3b8;margin-top:2px">Нажмите, чтобы скопировать код</div></div>
 <div style="display:flex;flex-direction:column;gap:8px">
-<button class="m-btn" onclick="pickSuit(0xd4b24c)">ЛАТУННЫЙ СТАНДАРТ</button>
-<button class="m-btn" onclick="pickSuit(0x4b7bec)">СТАЛЬНОЙ СИНИЙ</button>
-<button class="m-btn" onclick="pickSuit(0xa55eea)">ГРАФИТОВО-ФИОЛЕТОВЫЙ</button>
+<button class="m-btn" id="btn-lob-save" onclick="cycleLobbyLevel()">СЕКТОР: УРОВЕНЬ 0</button>
+<button class="m-btn" id="btn-lob-diff" onclick="cycleLobbyDiff()">СЛОЖНОСТЬ: ОБЫЧНАЯ</button>
 </div>
+<button class="m-btn" id="btn-lob-start" style="text-align:center;font-size:14px;padding:13px" onclick="launchExpedition()">СТАРТ</button>
+</div>
+</div>
+</div>
+
+<div id="scr-suit" class="sub-scr">
+<div class="sub-head"><h2>Униформа исследователя</h2><button class="m-btn" style="width:auto;padding:7px 14px" onclick="backToMain()">НАЗАД</button></div>
+<div style="max-width:340px;margin:auto;width:100%;display:flex;flex-direction:column;gap:10px">
+<button class="m-btn" onclick="pickSuit(0xc8a951)">ЯНТАРНЫЙ СТАНДАРТ</button>
+<button class="m-btn" onclick="pickSuit(0x7dd3fc)">ЛЕДЯНОЙ ГОЛУБОЙ</button>
+<button class="m-btn" onclick="pickSuit(0x94a3b8)">СТАЛЬНОЙ СЕРЫЙ</button>
 </div>
 </div>
 <div id="vig"></div><div id="cross"></div>
 <div id="item-prompt"><div class="ip-card" id="ip-name">Предмет</div><div class="ip-sub">Нажмите F</div></div>
+
 <div id="hud">
 <div id="chat-box" class="fade">
 <div id="chat-log"></div>
@@ -128,23 +185,22 @@ body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:
 <div id="room-tag">ЛОББИ: <span id="rc">----</span></div>
 <button id="btn-menu" onclick="toTermMenu()">В Меню</button>
 <div id="joy-zone"><div id="joy-stick"></div></div>
-<div id="mini-hud">
-<div class="m-hand" id="hud-hand" onclick="togglePad()">ПУСТО</div>
-<button id="btn-bag" onclick="togglePad()">РЮКЗАК</button>
-</div>
+
 <button id="btn-drink" onclick="drinkWater()" title="Выпить">💧</button>
 <button id="btn-f" onclick="doInteract()">F</button>
-<button id="btn-crouch" onclick="toggleCrouch()"><svg width="22" height="22" viewBox="0 0 24 24" fill="#e7e5e4"><circle cx="12" cy="6" r="2.5"/><path d="M9 11h6l1 4h-3v4h-2v-4H8z"/></svg></button>
-<button id="btn-sprint" ontouchstart="sprint=true" ontouchend="sprint=false" onmousedown="sprint=true" onmouseup="sprint=false"><svg width="28" height="28" viewBox="0 0 24 24" fill="#d4b24c"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></button>
+<button id="btn-bag-r" onclick="togglePad()" title="Инвентарь"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="2"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></button>
+<button id="btn-crouch" onclick="toggleCrouch()"><svg width="22" height="22" viewBox="0 0 24 24" fill="#cbd5e1"><circle cx="12" cy="6" r="2.5"/><path d="M9 11h6l1 4h-3v4h-2v-4H8z"/></svg></button>
+<button id="btn-sprint" ontouchstart="sprint=true" ontouchend="sprint=false" onmousedown="sprint=true" onmouseup="sprint=false"><svg width="26" height="26" viewBox="0 0 24 24" fill="#cbd5e1"><circle cx="13.5" cy="4.5" r="2"/><path d="M9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/></svg></button>
 </div>
+
 <div id="pad-screen">
 <div class="pad-head"><div class="pad-title">Снаряжение</div></div>
 <div class="pad-body">
 <div class="pad-col">
 <div class="pad-lbl">БЫСТРЫЙ ДОСТУП</div>
-<div style="font-size:9px;color:#a39e8c;font-weight:800">В РУКЕ</div>
+<div style="font-size:9px;color:#94a3b8;font-weight:800">В РУКЕ</div>
 <div class="p-cell act" id="inv-main" onclick="unequipMain()"></div>
-<div style="font-size:9px;color:#a39e8c;font-weight:800;margin-top:3px">КАРМАНЫ</div>
+<div style="font-size:9px;color:#94a3b8;font-weight:800;margin-top:3px">КАРМАНЫ</div>
 <div class="p-cell" id="inv-p0" onclick="equipFrom('p0')"></div>
 <div class="p-cell" id="inv-p1" onclick="equipFrom('p1')"></div>
 </div>
@@ -153,7 +209,7 @@ body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:
 <div class="bp-grid" id="bp-grid"></div>
 </div>
 <div class="san-box">
-<div style="font-size:9.5px;color:#d4b24c;font-weight:900;text-align:center">РАССУДОК</div>
+<div style="font-size:9.5px;color:#cbd5e1;font-weight:900;text-align:center">РАССУДОК</div>
 <div class="san-tube"><div id="san-fill"></div></div>
 <div id="san-pct" style="color:#22c55e;font-size:13px;font-weight:900">100%</div>
 </div>
@@ -163,42 +219,62 @@ body{overflow:hidden;background:#0c0b08}canvas{display:block;width:100vw;height:
 <span>НАЖМИТЕ НА ПРЕДМЕТ, ЧТОБЫ ВЗЯТЬ В РУКУ</span>
 </div>
 </div>
+
 <div id="end"><h2>Спасибо за прохождение Бета-Теста Mobile The Backrooms! В скором времени появятся новые уровни. Удачи!</h2></div>
 <script src="./three.min.js"></script>
 <script>
 const DB="https://firebaseio.com",pid="p_"+Math.floor(1e3+Math.random()*9e3);
-let active=false,st="MENU",coop=false,isHost=false,code="",maxLvl=+(localStorage.getItem("mtb_save")||0),suitCol=0xd4b24c;
+let active=false,st="INTRO",coop=false,isHost=false,code="",maxLvl=+(localStorage.getItem("mtb_save")||0),suitCol=0xc8a951;
+let lobMode="STORY",lobSelLvl=0,lobDiff="ОБЫЧНАЯ",lobPlayers={};
 let yaw=0,pitch=0,crouch=false,cr=0,sprint=false,joyX=0,joyY=0,joyId=null,lookId=null,lx=0,ly=0;
 let padOpen=false,invState={main:null,p0:null,p1:null,bp:new Array(9).fill(null)};
-let btns=[],itms=[],ld={},san=100,bst=0,currentAction=null;
+let btns=[],itms=[],colliders=[],ld={},san=100,bst=0,currentAction=null,introStep=0;
+
+setTimeout(()=>{if(st==="INTRO"&&introStep===0){introStep=1;document.getElementById("intro-logo").style.display="none";document.getElementById("intro-warn").style.display="block";document.getElementById("intro-tap").style.display="block"}},2200);
+function dismissIntro(){
+if(introStep===0){introStep=1;document.getElementById("intro-logo").style.display="none";document.getElementById("intro-warn").style.display="block";document.getElementById("intro-tap").style.display="block";return}
+document.getElementById("intro-scr").classList.add("off");document.getElementById("main-menu").classList.add("on");buildMenuBackdrop();
+}
+function exitToIntro(){document.getElementById("main-menu").classList.remove("on");const s=document.getElementById("intro-scr");s.classList.remove("off");introStep=1;document.getElementById("intro-logo").style.display="none";document.getElementById("intro-warn").style.display="block";document.getElementById("intro-tap").style.display="block";st="INTRO"}
 
 let humCtx=null,humGain=null;
-function setLampHum(en){try{if(en&&!humCtx){humCtx=new(window.AudioContext||window.webkitAudioContext)();const o=humCtx.createOscillator(),f=humCtx.createBiquadFilter();humGain=humCtx.createGain();o.type="sawtooth";o.frequency.value=60;f.type="lowpass";f.frequency.value=140;humGain.gain.value=.03;o.connect(f);f.connect(humGain);humGain.connect(humCtx.destination);o.start()}if(humGain)humGain.gain.setTargetAtTime(en?.03:.0001,humCtx.currentTime,.2)}catch(e){}}
+function setLampHum(en){try{if(en&&!humCtx){humCtx=new(window.AudioContext||window.webkitAudioContext)();const o=humCtx.createOscillator(),f=humCtx.createBiquadFilter();humGain=humCtx.createGain();o.type="sawtooth";o.frequency.value=60;f.type="lowpass";f.frequency.value=140;humGain.gain.value=.028;o.connect(f);f.connect(humGain);humGain.connect(humCtx.destination);o.start()}if(humGain)humGain.gain.setTargetAtTime(en?.028:.0001,humCtx.currentTime,.2)}catch(e){}}
 
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x3b3519);scene.fog=new THREE.FogExp2(0x3b3519,.018);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x1f1c0e);scene.fog=new THREE.FogExp2(0x1f1c0e,.034);
 const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.05,130),rig=new THREE.Group();rig.position.set(0,1.65,3.2);rig.add(camera);scene.add(rig);
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.shadowMap.enabled=false;document.body.appendChild(renderer.domElement);
 
 function updateViewportQuality(){const w=document.documentElement.clientWidth||innerWidth,h=document.documentElement.clientHeight||innerHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2.5));renderer.setSize(w,h,false)}
 updateViewportQuality();addEventListener("resize",updateViewportQuality);addEventListener("orientationchange",()=>setTimeout(updateViewportQuality,120));
 
-const texLoader=new THREE.TextureLoader();
-function loadCustomTex(file,rx,ry,fb){const t0=mkTex(fb);t0.repeat.set(rx,ry);texLoader.load(file,t=>{t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);t.anisotropy=8;t0.image=t.image;t0.needsUpdate=true},undefined,()=>{});return t0}
-function mkTex(tp,txt="",bg="#d4b24c",fg="#12110e"){
+function mkTex(tp,txt="",bg="#cbd5e1",fg="#0f172a"){
 const c=document.createElement("canvas");c.width=c.height=512;const g=c.getContext("2d");
-if(tp==="w"){g.fillStyle="#a39f42";g.fillRect(0,0,512,512);g.fillStyle="#868232";for(let x=0;x<512;x+=48){g.fillRect(x,0,6,512);for(let y=0;y<512;y+=48)g.fillRect(x+18,y+14,12,20)}}
-else if(tp==="f"){g.fillStyle="#948e3d";g.fillRect(0,0,512,512);for(let i=0;i<4e3;i++){g.fillStyle=i%2?"rgba(0,0,0,.1)":"rgba(255,250,200,.08)";g.fillRect(Math.random()*512,Math.random()*512,3,3)}}
-else if(tp==="ceil"){g.fillStyle="#cfc89b";g.fillRect(0,0,512,512);for(let i=0;i<2e3;i++){g.fillStyle="rgba(0,0,0,.06)";g.fillRect(Math.random()*512,Math.random()*512,2,2)}g.strokeStyle="#7a7558";g.lineWidth=8;for(let i=0;i<=512;i+=128){g.beginPath();g.moveTo(i,0);g.lineTo(i,512);g.stroke();g.beginPath();g.moveTo(0,i);g.lineTo(512,i);g.stroke()}g.fillStyle="#ffffff";g.fillRect(134,134,116,116);g.fillRect(390,390,116,116)}
+if(tp==="w"){g.fillStyle="#96923b";g.fillRect(0,0,512,512);g.fillStyle="#7a762d";for(let x=0;x<512;x+=48){g.fillRect(x,0,6,512);for(let y=0;y<512;y+=48)g.fillRect(x+18,y+14,12,20)}}
+else if(tp==="f"){g.fillStyle="#857f35";g.fillRect(0,0,512,512);for(let i=0;i<4e3;i++){g.fillStyle=i%2?"rgba(0,0,0,.1)":"rgba(255,250,200,.08)";g.fillRect(Math.random()*512,Math.random()*512,3,3)}}
+else if(tp==="ceil"){g.fillStyle="#bab48b";g.fillRect(0,0,512,512);for(let i=0;i<2e3;i++){g.fillStyle="rgba(0,0,0,.06)";g.fillRect(Math.random()*512,Math.random()*512,2,2)}g.strokeStyle="#6e6a50";g.lineWidth=8;for(let i=0;i<=512;i+=128){g.beginPath();g.moveTo(i,0);g.lineTo(i,512);g.stroke();g.beginPath();g.moveTo(0,i);g.lineTo(512,i);g.stroke()}g.fillStyle="#fefce8";g.fillRect(134,134,116,116);g.fillRect(390,390,116,116)}
 else if(tp==="c"){g.fillStyle="#475569";g.fillRect(0,0,512,256);g.fillStyle="#94a3b8";g.fillRect(0,256,512,256)}
-else if(tp==="g"){g.fillStyle="#e2e8f0";g.fillRect(0,0,512,512);g.fillStyle="#0f172a";g.fillRect(48,40,416,220);g.strokeStyle="#64748b";g.lineWidth=4;for(let x=48;x<=464;x+=28){g.beginPath();g.moveTo(x,40);g.lineTo(x,260);g.stroke()}for(let y=40;y<=260;y+=28){g.beginPath();g.moveTo(48,y);g.lineTo(464,y);g.stroke()}}
-else if(tp==="a"){g.fillStyle="#262626";g.fillRect(0,0,512,512);g.fillStyle="#000";g.beginPath();g.moveTo(80,220);g.lineTo(300,220);g.lineTo(300,150);g.lineTo(440,256);g.lineTo(300,362);g.lineTo(300,292);g.lineTo(80,292);g.fill()}
-else{g.fillStyle=bg;g.fillRect(0,0,512,512);g.strokeStyle=fg;g.lineWidth=20;g.strokeRect(18,18,476,476);g.fillStyle=fg;g.font="bold 72px sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(txt,256,256)}
+else if(tp==="gr"){g.fillStyle="#65a30d";g.fillRect(0,180,512,332);g.fillStyle="#64748b";g.fillRect(0,0,512,180)}
+else if(tp==="exit"){g.fillStyle="#064e3b";g.fillRect(0,0,512,512);g.fillStyle="#10b981";g.fillRect(130,30,252,75);g.fillStyle="#fff";g.font="bold 46px sans-serif";g.textAlign="center";g.fillText("EXIT",256,82);g.fillStyle="#059669";g.fillRect(156,130,200,260)}
+else if(tp==="gate"){g.fillStyle="#334155";g.fillRect(0,0,512,512);g.fillStyle="#1e293b";for(let y=0;y<512;y+=24)g.fillRect(0,y,512,10)}
+else if(tp==="pc"){g.fillStyle="#1e293b";g.fillRect(0,0,512,512);g.fillStyle="#38bdf8";g.fillRect(60,60,392,260);g.fillStyle="#0f172a";g.font="bold 38px sans-serif";g.textAlign="center";g.fillText("GATE CONTROL",256,200)}
+else{g.fillStyle=bg;g.fillRect(0,0,512,512);g.strokeStyle=fg;g.lineWidth=18;g.strokeRect(18,18,476,476);g.fillStyle=fg;g.font="bold 64px sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(txt,256,256)}
 const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t;
 }
-const tW=loadCustomTex("./wall_0.png",4,1,"w"),tF=loadCustomTex("./carpet_0.png",10,10,"f"),tCeil=mkTex("ceil");tCeil.repeat.set(8,8);
-const tC=mkTex("c"),tG=mkTex("g"),tA=mkTex("a");
+
+const mW=new THREE.MeshStandardMaterial({map:mkTex("w"),roughness:.92,metalness:0}),mF=new THREE.MeshStandardMaterial({map:mkTex("f"),roughness:.96,metalness:0}),mCeil=new THREE.MeshStandardMaterial({map:mkTex("ceil"),emissive:0x4a462c,emissiveIntensity:.4,roughness:.85});
+mW.map.repeat.set(4,1);mF.map.repeat.set(10,10);mCeil.map.repeat.set(8,8);
+const mC=new THREE.MeshStandardMaterial({map:mkTex("c"),roughness:.88}),mGr=new THREE.MeshStandardMaterial({map:mkTex("gr"),roughness:.88}),mExit=new THREE.MeshStandardMaterial({map:mkTex("exit"),emissive:0x059669,emissiveIntensity:.45}),mGate=new THREE.MeshStandardMaterial({map:mkTex("gate"),roughness:.7}),mPc=new THREE.MeshStandardMaterial({map:mkTex("pc"),emissive:0x0284c7,emissiveIntensity:.35});
+
+// Гарантированная загрузка твоих текстур wall_0.png и carpet_0.png с обновлением материала
+const texLoader=new THREE.TextureLoader();
+function bindCustomTexture(names,mat,rx,ry,idx=0){
+if(idx>=names.length)return;
+texLoader.load(names[idx],t=>{t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);t.anisotropy=8;mat.map=t;mat.needsUpdate=true},undefined,()=>bindCustomTexture(names,mat,rx,ry,idx+1));
+}
+bindCustomTexture(["./wall_0.png","./wall_0.jpg","./Wall_0.png"],mW,4,1);
+bindCustomTexture(["./carpet_0.png","./carpet_0.jpg","./Carpet_0.png"],mF,10,10);
 let chatTimer=null;
-function addChatMsg(txt,col="#f5f0dc"){const b=document.getElementById("chat-box"),l=document.getElementById("chat-log"),e=document.createElement("div");e.style.color=col;e.innerText=txt;l.appendChild(e);l.scrollTop=l.scrollHeight;b.classList.remove("fade");clearTimeout(chatTimer);chatTimer=setTimeout(()=>b.classList.add("fade"),6500)}
+function addChatMsg(txt,col="#f1f5f9"){const b=document.getElementById("chat-box"),l=document.getElementById("chat-log"),e=document.createElement("div");e.style.color=col;e.innerText=txt;l.appendChild(e);l.scrollTop=l.scrollHeight;b.classList.remove("fade");clearTimeout(chatTimer);chatTimer=setTimeout(()=>b.classList.add("fade"),6500)}
 function sendChat(){const i=document.getElementById("chat-in"),t=i.value.trim();if(!t)return;i.value="";const n=document.getElementById("inp-nick").value.trim()||"Agent";addChatMsg(`${n}: ${t}`,"#fff");if(coop&&code)fetch(`${DB}/rooms/${code}/chat.json`,{method:"POST",body:JSON.stringify({u:pid,n,t,ts:Date.now()})}).catch(()=>{})}
 document.getElementById("chat-in").addEventListener("keydown",e=>{if(e.key==="Enter")sendChat()});
 
@@ -206,100 +282,315 @@ const slvMat=new THREE.MeshStandardMaterial({color:suitCol,roughness:.75}),runAr
 function makeSprintArm(s){const g=new THREE.Group();g.position.set(s*.28,-.58,-.36);const a=new THREE.Mesh(new THREE.CylinderGeometry(.044,.054,.36,16),slvMat);a.rotation.x=Math.PI/2.4;const v=new THREE.Mesh(new THREE.SphereGeometry(.048,14,14),new THREE.MeshStandardMaterial({color:0x18181b,roughness:.45}));v.scale.set(.9,.85,1.35);v.position.set(0,.06,-.18);g.add(a,v);runArms.add(g);return g}
 const sprintArmL=makeSprintArm(-1),sprintArmR=makeSprintArm(1);let sprintPhase=0,sprintBlend=0,idlePhase=0;
 
-function createNickSprite(nm){const c=document.createElement("canvas");c.width=256;c.height=64;const g=c.getContext("2d");g.fillStyle="rgba(18,17,14,.8)";g.fillRect(16,10,224,44);g.strokeStyle="#d4b24c";g.lineWidth=3;g.strokeRect(16,10,224,44);g.fillStyle="#f5f0dc";g.font="bold 24px sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(nm,128,33);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true}));sp.scale.set(1.2,.3,1);sp.position.set(0,2.05,0);return sp}
+function createNickSprite(nm){const c=document.createElement("canvas");c.width=256;c.height=64;const g=c.getContext("2d");g.fillStyle="rgba(15,23,42,.8)";g.fillRect(16,10,224,44);g.strokeStyle="#7dd3fc";g.lineWidth=3;g.strokeRect(16,10,224,44);g.fillStyle="#f1f5f9";g.font="bold 24px sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(nm,128,33);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true}));sp.scale.set(1.2,.3,1);sp.position.set(0,2.05,0);return sp}
 function mkAgent(nm="Agent"){const r=new THREE.Group(),sM=new THREE.MeshStandardMaterial({color:suitCol,roughness:.65});const tr=new THREE.Mesh(new THREE.CylinderGeometry(.21,.19,.56,18),sM);tr.position.y=1.24;const hd=new THREE.Mesh(new THREE.SphereGeometry(.15,18,16),sM);hd.position.y=1.72;const vs=new THREE.Mesh(new THREE.SphereGeometry(.11,16,14,-.9,1.8,.5,1.1),new THREE.MeshStandardMaterial({color:0x0f172a,roughness:.25}));vs.position.set(0,1.72,.06);const lL=new THREE.Mesh(new THREE.CylinderGeometry(.085,.075,.85,14),sM);lL.position.set(-.1,.45,0);const lR=lL.clone();lR.position.x=.1;const nk=createNickSprite(nm);r.add(tr,hd,vs,lL,lR,nk);r.userData={lL,lR,tp:new THREE.Vector3(),ty:0,wp:0,nickSp:nk,lastNick:nm};return r}
 const fr=mkAgent("Напарник");fr.visible=false;scene.add(fr);let es=null,chatEs=null;
 
+function renderLobbySlots(){
+const boxEl=document.getElementById("lob-slots");boxEl.innerHTML="";
+const myNick=document.getElementById("inp-nick").value.trim()||"Agent_01";
+const list=[{id:pid,nick:myNick+" (Вы)",host:isHost}];
+for(let[k,v]of Object.entries(lobPlayers))if(k!==pid&&v&&v.nick)list.push({id:k,nick:v.nick,host:false});
+for(let i=0;i<4;i++){
+const d=document.createElement("div");
+if(list[i]){d.className="p-slot";d.innerHTML=`<span>${list[i].nick}</span><span class="badge-rdy">ГОТОВ</span>`}
+else{d.className="p-slot empty";d.innerHTML=`<span>Пустой слот #${i+1}</span><span>Ожидание...</span>`}
+boxEl.appendChild(d);
+}
+coop=list.length>1;
+}
+
+function addLobChat(txt){const l=document.getElementById("lob-log"),e=document.createElement("div");e.innerText=txt;l.appendChild(e);l.scrollTop=l.scrollHeight}
+function sendLobbyChat(){const i=document.getElementById("lob-in"),t=i.value.trim();if(!t)return;i.value="";const n=document.getElementById("inp-nick").value.trim()||"Agent";addLobChat(`${n}: ${t}`);if(code)fetch(`${DB}/rooms/${code}/chat.json`,{method:"POST",body:JSON.stringify({u:pid,n,t,ts:Date.now()})}).catch(()=>{})}
+document.getElementById("lob-in").addEventListener("keydown",e=>{if(e.key==="Enter")sendLobbyChat()});
+
 function connRoom(c){
 if(es)es.close();es=new EventSource(`${DB}/rooms/${c}.json`);
-const sy=d=>{if(!d)return;if(!isHost&&d.level&&d.level!==st){const fn={L0:lvl0,L1:lvl1,L2:lvl2,L3:lvl3,L4:lvl4}[d.level];if(fn)fn()}if(d.players)for(let[k,v]of Object.entries(d.players))if(k!==pid&&v&&v.x!==undefined){fr.visible=true;fr.userData.tp.set(v.x,v.y,v.z);fr.userData.ty=v.yaw||0;fr.userData.wk=v.wk||false;if(v.nick&&v.nick!==fr.userData.lastNick){fr.remove(fr.userData.nickSp);fr.userData.nickSp=createNickSprite(v.nick);fr.userData.lastNick=v.nick;fr.add(fr.userData.nickSp)}}};
+const sy=d=>{
+if(!d)return;
+if(d.players){lobPlayers=d.players;renderLobbySlots();for(let[k,v]of Object.entries(d.players))if(k!==pid&&v&&v.x!==undefined&&active){fr.visible=true;fr.userData.tp.set(v.x,v.y,v.z);fr.userData.ty=v.yaw||0;fr.userData.wk=v.wk||false;if(v.nick&&v.nick!==fr.userData.lastNick){fr.remove(fr.userData.nickSp);fr.userData.nickSp=createNickSprite(v.nick);fr.userData.lastNick=v.nick;fr.add(fr.userData.nickSp)}}}
+if(!isHost&&d.started&&d.level&&!active){startExpeditionClient(d.level)}
+else if(!isHost&&active&&d.level&&d.level!==st){const fn={L0:lvl0,L1:lvl1,L2:lvl2,L3:lvl3,HUB:lvlHub,L4:lvl4}[d.level];if(fn)fn()}
+};
 es.addEventListener("put",e=>{const m=JSON.parse(e.data);if(m&&m.data)sy(m.data)});es.addEventListener("patch",e=>{const m=JSON.parse(e.data);if(m&&m.data)sy(m.data)});
 if(chatEs)chatEs.close();chatEs=new EventSource(`${DB}/rooms/${c}/chat.json`);
-chatEs.addEventListener("put",e=>{const m=JSON.parse(e.data);if(m&&m.data)for(let v of Object.values(m.data))if(v&&v.u!==pid&&Date.now()-(v.ts||0)<15e3)addChatMsg(`${v.n||"Друг"}: ${v.t}`,"#7dd3fc")});
-chatEs.addEventListener("patch",e=>{const m=JSON.parse(e.data);if(m&&m.data)for(let v of Object.values(m.data))if(v&&v.u!==pid)addChatMsg(`${v.n||"Друг"}: ${v.t}`,"#7dd3fc")});
+chatEs.addEventListener("put",e=>{const m=JSON.parse(e.data);if(m&&m.data)for(let v of Object.values(m.data))if(v&&v.u!==pid&&Date.now()-(v.ts||0)<15e3){addChatMsg(`${v.n||"Друг"}: ${v.t}`,"#7dd3fc");addLobChat(`${v.n||"Друг"}: ${v.t}`)}});
+chatEs.addEventListener("patch",e=>{const m=JSON.parse(e.data);if(m&&m.data)for(let v of Object.values(m.data))if(v&&v.u!==pid){addChatMsg(`${v.n||"Друг"}: ${v.t}`,"#7dd3fc");addLobChat(`${v.n||"Друг"}: ${v.t}`)}});
 }
-setInterval(()=>{if(!coop||!code||!active)return;const n=document.getElementById("inp-nick").value.trim()||"Agent";fetch(`${DB}/rooms/${code}/players/${pid}.json`,{method:"PUT",body:JSON.stringify({x:rig.position.x,y:rig.position.y-1.65,z:rig.position.z,yaw,wk:Math.hypot(joyX,joyY)>.1,nick:n})}).catch(()=>{})},140);
+setInterval(()=>{if(!code)return;const n=document.getElementById("inp-nick").value.trim()||"Agent";fetch(`${DB}/rooms/${code}/players/${pid}.json`,{method:"PUT",body:JSON.stringify({x:rig.position.x,y:rig.position.y-1.65,z:rig.position.z,yaw,wk:Math.hypot(joyX,joyY)>.1,nick:n})}).catch(()=>{})},250);
 const wg=new THREE.Group();scene.add(wg);
-function clr(){while(wg.children.length)wg.remove(wg.children);btns=[];itms=[];ld={}}
-function addBrightCeilingLight(b=1.75){const h=new THREE.HemisphereLight(0xfffbeb,0x8a8240,b),d=new THREE.DirectionalLight(0xfffef0,b*.65);d.position.set(2,12,4);wg.add(h,d)}
-function addL(x,y,z,col=0xfffef0,int=2.4,d=34){const l=new THREE.PointLight(col,int,d,1);l.position.set(x,y,z);wg.add(l);return l}
+function clr(){while(wg.children.length)wg.remove(wg.children);btns=[];itms=[];colliders=[];ld={}}
+
+// Умеренный, атмосферный свет без засвета текстур
+function addSoftRoomLight(b=.72){const h=new THREE.HemisphereLight(0xfef9c3,0x3f3a1e,b),d=new THREE.DirectionalLight(0xfefce8,b*.45);d.position.set(2,12,4);wg.add(h,d)}
+function addL(x,y,z,col=0xfef9c3,int=1.15,d=22){const l=new THREE.PointLight(col,int,d,1.4);l.position.set(x,y,z);wg.add(l);return l}
 function addB(x,y,z,w,h,txt,bg,fg,fn,label="Панель"){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,.08),new THREE.MeshStandardMaterial({map:mkTex("s",txt,bg,fg),roughness:.7}));m.position.set(x,y,z);wg.add(m);btns.push({m,fn,label})}
-function box(x,y,z,w,h,d,mat){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);wg.add(m);return m}
+function addPropBtn(mesh,fn,label){btns.push({m:mesh,fn,label})}
+
+// Построение стен с автоматической регистрацией коллизии (solid = true)
+function box(x,y,z,w,h,d,mat,solid=true){
+const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);wg.add(m);
+if(solid){const col={x,y,z,hw:w/2,hd:d/2,m,active:true};colliders.push(col);m.userData.col=col}
+return m;
+}
+function checkWallHit(nx,nz,yPos){
+const r=.42;
+for(let c of colliders){
+if(!c.active||!c.m.visible)continue;
+if(Math.abs(yPos-c.y)>2.1)continue;
+if(Math.abs(nx-c.x)<c.hw+r&&Math.abs(nz-c.z)<c.hd+r)return true;
+}
+return false;
+}
+
 function spIt(tp,x,y,z){const nm={water:"Миндальная вода",key:"Ключ от двери",ladder:"Часть лестницы"},m=tp==="water"?new THREE.Mesh(new THREE.CylinderGeometry(.055,.06,.24,14),new THREE.MeshStandardMaterial({color:0x38bdf8,roughness:.35})):tp==="key"?new THREE.Mesh(new THREE.TorusGeometry(.11,.025,10,20),new THREE.MeshStandardMaterial({color:0xfacc15,roughness:.4})):new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.68,12),new THREE.MeshStandardMaterial({color:0x92400e,roughness:.8}));if(tp==="ladder")m.rotation.z=Math.PI/2;m.position.set(x,y,z);wg.add(m);itms.push({tp,m,tk:false,label:nm[tp]})}
 
-const mW=new THREE.MeshStandardMaterial({map:tW,roughness:.92,metalness:0}),mF=new THREE.MeshStandardMaterial({map:tF,roughness:.96,metalness:0}),mCeil=new THREE.MeshStandardMaterial({map:tCeil,emissive:0x736e46,emissiveIntensity:.65,roughness:.8}),mC=new THREE.MeshStandardMaterial({map:tC,roughness:.88,metalness:0}),mG=new THREE.MeshStandardMaterial({map:tG,roughness:.75}),mA=new THREE.MeshStandardMaterial({map:tA,roughness:.9});
+function buildMenuBackdrop(){clr();st="MENU";setLampHum(false);scene.background=new THREE.Color(0x211e0f);scene.fog=new THREE.FogExp2(0x211e0f,.028);rig.position.set(0,1.65,4.5);yaw=.08;pitch=0;addSoftRoomLight(.82);box(0,-.1,-6,26,.2,30,mF,false);box(0,3.3,-6,26,.2,30,mCeil,false);box(-6.5,1.6,-6,.4,3.2,30,mW);box(6.5,1.6,-6,.4,3.2,30,mW);box(0,1.6,-18,26,3.2,.4,mW);box(-2.4,1.6,-2.5,.9,3.2,.9,mW);box(2.6,1.6,-5.5,.9,3.2,.9,mW);box(-1.5,1.6,-10.5,4.5,3.2,.4,mW);addL(0,2.95,2.2,0xfef9c3,1.25,22);addL(-1.5,2.95,-5.5,0xfef9c3,1.1,22)}
 
-function buildMenuBackdrop(){clr();st="MENU";setLampHum(false);scene.background=new THREE.Color(0x3b3519);scene.fog=new THREE.FogExp2(0x3b3519,.018);rig.position.set(0,1.65,4.5);yaw=.08;pitch=0;addBrightCeilingLight(1.85);box(0,-.1,-6,26,.2,30,mF);box(0,3.3,-6,26,.2,30,mCeil);box(-6.5,1.6,-6,.4,3.2,30,mW);box(6.5,1.6,-6,.4,3.2,30,mW);box(0,1.6,-18,26,3.2,.4,mW);box(-2.4,1.6,-2.5,.9,3.2,.9,mW);box(2.6,1.6,-5.5,.9,3.2,.9,mW);box(-1.5,1.6,-10.5,4.5,3.2,.4,mW);addL(0,2.95,2.2,0xfffef0,2.8,28);addL(-1.5,2.95,-5.5,0xfffef0,2.5,28)}
+function openModeSelect(){document.getElementById("main-menu").classList.remove("on");document.getElementById("scr-mode").classList.add("on")}
+function openSuitScreen(){document.getElementById("main-menu").classList.remove("on");document.getElementById("scr-suit").classList.add("on")}
+function backToMain(){document.querySelectorAll(".sub-scr").forEach(s=>s.classList.remove("on"));document.getElementById("main-menu").classList.add("on")}
+function pickSuit(col){suitCol=col;slvMat.color.setHex(col);backToMain()}
 
-const levelNames=[{t:"УРОВЕНЬ 0",d:"Жёлтый лабиринт и яма"},{t:"УРОВЕНЬ 1",d:"Паркинг: код 4 машин"},{t:"УРОВЕНЬ 2",d:"Сектор: 5 ключей и шлюз"},{t:"УРОВЕНЬ 3",d:"Тёмная парковка и лифт"},{t:"УРОВЕНЬ 4",d:"Хаб: колонны 1–5 и выход"}];
-function renderSaveSlots(){const g=document.getElementById("save-grid");g.innerHTML="";const fns=[lvl0,lvl1,lvl2,lvl3,lvl4];levelNames.forEach((inf,i)=>{const u=i<=maxLvl,s=document.createElement("button");s.className="save-slot "+(u?"unlocked":"locked");s.innerHTML=`<b>${inf.t} ${u?"":"🔒"}</b><span>${u?inf.d:"Закрыто"}</span>`;s.onclick=()=>{if(u){closeWins();startGame(fns[i],"L"+i)}};g.appendChild(s)})}
-function openWin(id){closeWins();if(id==="saves")renderSaveSlots();document.getElementById("win-"+id).classList.add("open")}
-function closeWins(){document.querySelectorAll(".win-overlay").forEach(w=>w.classList.remove("open"))}
-function resetSaves(){maxLvl=0;localStorage.setItem("mtb_save",0);renderSaveSlots()}
-function pickSuit(col){suitCol=col;slvMat.color.setHex(col);closeWins()}
-function hostRoom(){closeWins();coop=true;isHost=true;code=""+Math.floor(1e3+Math.random()*9e3);fetch(`${DB}/rooms/${code}.json`,{method:"PUT",body:JSON.stringify({level:"L0"})}).catch(()=>{});connRoom(code);startGame(lvl0,"L0")}
-function joinRoom(){const c=document.getElementById("join-code").value.trim();if(c.length===4){closeWins();coop=true;isHost=false;code=c;connRoom(c);startGame(lvl0,"L0")}}
-function startGame(fn,lc){document.getElementById("main-menu").classList.add("off");document.getElementById("hud").style.display="block";const rt=document.getElementById("room-tag");if(coop){rt.style.display="block";document.getElementById("rc").innerText=code+(isHost?" (ХОСТ)":"")}else rt.style.display="none";active=true;invState={main:null,p0:null,p1:null,bp:new Array(9).fill(null)};renderInv();if(coop&&isHost)fetch(`${DB}/rooms/${code}/level.json`,{method:"PUT",body:JSON.stringify(lc)}).catch(()=>{});fn()}
-function toTermMenu(){active=false;padOpen=false;setLampHum(false);document.getElementById("pad-screen").classList.remove("on");document.getElementById("hud").style.display="none";document.getElementById("item-prompt").classList.remove("show");document.getElementById("end").classList.remove("on");document.getElementById("main-menu").classList.remove("off");buildMenuBackdrop()}
+function enterLobby(mode){
+lobMode=mode;isHost=true;lobPlayers={};lobSelLvl=0;
+code=""+Math.floor(1e3+Math.random()*9e3);
+document.getElementById("lob-code-txt").innerText=code;
+document.getElementById("lob-log").innerHTML="";
+document.getElementById("btn-lob-start").style.display="block";
+document.getElementById("btn-lob-save").style.display=mode==="STORY"?"block":"none";
+document.getElementById("btn-lob-save").innerText="СЕКТОР: УРОВЕНЬ 0";
+document.querySelectorAll(".sub-scr").forEach(s=>s.classList.remove("on"));
+document.getElementById("scr-lobby").classList.add("on");
+const initLvl=mode==="HUB"?"HUB":"L0";
+fetch(`${DB}/rooms/${code}.json`,{method:"PUT",body:JSON.stringify({level:initLvl,started:false})}).catch(()=>{});
+connRoom(code);renderLobbySlots();
+}
+
+function joinFriendLobby(){
+const c=document.getElementById("join-code").value.trim();
+if(c.length!==4)return;
+isHost=false;code=c;lobPlayers={};
+document.getElementById("lob-code-txt").innerText=code;
+document.getElementById("lob-log").innerHTML="";
+document.getElementById("btn-lob-start").style.display="none";
+document.getElementById("btn-lob-save").style.display="none";
+document.querySelectorAll(".sub-scr").forEach(s=>s.classList.remove("on"));
+document.getElementById("scr-lobby").classList.add("on");
+connRoom(c);renderLobbySlots();addLobChat("Подключено к лобби. Ожидание старта от главного...");
+}
+
+function leaveLobby(){if(es)es.close();if(chatEs)chatEs.close();code="";coop=false;backToMain()}
+function copyLobbyCode(){try{navigator.clipboard.writeText(code);addLobChat("Код лобби скопирован: "+code)}catch(e){}}
+function cycleLobbyLevel(){if(!isHost)return;lobSelLvl=(lobSelLvl+1)%(maxLvl+1);document.getElementById("btn-lob-save").innerText="СЕКТОР: УРОВЕНЬ "+lobSelLvl}
+function cycleLobbyDiff(){if(!isHost)return;lobDiff=lobDiff==="ОБЫЧНАЯ"?"КОШМАР":"ОБЫЧНАЯ";document.getElementById("btn-lob-diff").innerText="СЛОЖНОСТЬ: "+lobDiff}
+
+function launchExpedition(){
+const lc=lobMode==="HUB"?"HUB":"L"+lobSelLvl;
+document.querySelectorAll(".sub-scr").forEach(s=>s.classList.remove("on"));
+document.getElementById("hud").style.display="block";
+const rt=document.getElementById("room-tag");
+if(coop){rt.style.display="block";document.getElementById("rc").innerText=code}else rt.style.display="none";
+active=true;invState={main:null,p0:null,p1:null,bp:new Array(9).fill(null)};renderInv();
+if(code)fetch(`${DB}/rooms/${code}.json`,{method:"PATCH",body:JSON.stringify({level:lc,started:true})}).catch(()=>{});
+const fn={L0:lvl0,L1:lvl1,L2:lvl2,L3:lvl3,HUB:lvlHub,L4:lvl4}[lc]||lvl0;
+fn();
+}
+function startExpeditionClient(lc){
+document.querySelectorAll(".sub-scr").forEach(s=>s.classList.remove("on"));
+document.getElementById("hud").style.display="block";
+document.getElementById("room-tag").style.display="block";document.getElementById("rc").innerText=code;
+active=true;invState={main:null,p0:null,p1:null,bp:new Array(9).fill(null)};renderInv();
+const fn={L0:lvl0,L1:lvl1,L2:lvl2,L3:lvl3,HUB:lvlHub,L4:lvl4}[lc]||lvl0;
+fn();
+}
+
+function toTermMenu(){
+active=false;padOpen=false;setLampHum(false);if(es)es.close();if(chatEs)chatEs.close();code="";coop=false;
+document.getElementById("pad-screen").classList.remove("on");document.getElementById("hud").style.display="none";
+document.getElementById("item-prompt").classList.remove("show");document.getElementById("end").classList.remove("on");
+document.getElementById("main-menu").classList.add("on");buildMenuBackdrop();
+}
 const unlk=n=>{if(n>maxLvl){maxLvl=n;localStorage.setItem("mtb_save",n)}if(coop&&isHost&&code)fetch(`${DB}/rooms/${code}/level.json`,{method:"PUT",body:JSON.stringify("L"+n)}).catch(()=>{})};
-
 const itemLabels={water:"💧\nВода",ladder:"🪜\nЛестн.",key:"🔑\nКлюч"};
 function togglePad(){padOpen=!padOpen;document.getElementById("pad-screen").classList.toggle("on",padOpen);if(padOpen)renderInv()}
-function renderInv(){document.getElementById("inv-main").innerText=invState.main?itemLabels[invState.main]:"";document.getElementById("inv-p0").innerText=invState.p0?itemLabels[invState.p0]:"";document.getElementById("inv-p1").innerText=invState.p1?itemLabels[invState.p1]:"";const g=document.getElementById("bp-grid");g.innerHTML="";for(let i=0;i<9;i++){const c=document.createElement("div");c.className="p-cell";c.innerText=invState.bp[i]?itemLabels[invState.bp[i]]:"";c.onclick=()=>equipFromBp(i);g.appendChild(c)}const cur=invState.main;document.getElementById("hud-hand").innerText=cur?itemLabels[cur].replace("\n"," "):"ПУСТО";document.getElementById("btn-drink").classList.toggle("show",cur==="water")}
+function renderInv(){document.getElementById("inv-main").innerText=invState.main?itemLabels[invState.main]:"";document.getElementById("inv-p0").innerText=invState.p0?itemLabels[invState.p0]:"";document.getElementById("inv-p1").innerText=invState.p1?itemLabels[invState.p1]:"";const g=document.getElementById("bp-grid");g.innerHTML="";for(let i=0;i<9;i++){const c=document.createElement("div");c.className="p-cell";c.innerText=invState.bp[i]?itemLabels[invState.bp[i]]:"";c.onclick=()=>equipFromBp(i);g.appendChild(c)}document.getElementById("btn-drink").classList.toggle("show",invState.main==="water")}
 function unequipMain(){if(!invState.main)return;if(!invState.p0){invState.p0=invState.main;invState.main=null}else if(!invState.p1){invState.p1=invState.main;invState.main=null}else{const i=invState.bp.indexOf(null);if(i!==-1){invState.bp[i]=invState.main;invState.main=null}}renderInv()}
 function equipFrom(s){if(!invState[s])return;const t=invState.main;invState.main=invState[s];invState[s]=t;renderInv()}
 function equipFromBp(i){if(!invState.bp[i])return;const t=invState.main;invState.main=invState.bp[i];invState.bp[i]=t;renderInv()}
 function storeItem(tp){if(!invState.main){invState.main=tp;renderInv();return true}if(!invState.p0){invState.p0=tp;renderInv();return true}if(!invState.p1){invState.p1=tp;renderInv();return true}const i=invState.bp.indexOf(null);if(i!==-1){invState.bp[i]=tp;renderInv();return true}addChatMsg("Рюкзак переполнен!","#ef4444");return false}
 function drinkWater(){if(invState.main!=="water")return;invState.main=null;renderInv();san=Math.min(100,san+45);bst=500;addChatMsg("Выпили миндальную воду! Рассудок восстановлен","#7dd3fc")}
-function lvl0(){
-clr();st="L0";scene.background=new THREE.Color(0x3a3418);scene.fog=new THREE.FogExp2(0x3a3418,.02);rig.position.set(0,1.65,0);yaw=pitch=0;addBrightCeilingLight(1.85);
-box(0,-.1,-5,26,.2,18,mF);box(-6,-.1,-18,10,.2,8,mF);box(6,-.1,-18,10,.2,8,mF);box(0,-.1,-15,2,.2,2,mF);box(0,-.1,-21,2,.2,2,mF);box(0,3.3,-10,32,.2,32,mCeil);
-box(0,1.6,3.5,22,3.2,.4,mW);box(-11,1.6,-9,.4,3.2,26,mW);box(11,1.6,-9,.4,3.2,26,mW);box(-4,1.6,-4,.4,3.2,8,mW);box(4,1.6,-5,.4,3.2,7,mW);
-box(-7.5,1.6,-13.5,6.5,3.2,.5,mW);box(-3.2,1,-13.5,2,2,.5,mW);box(-3.2,2.9,-13.5,2,.6,.5,mW);box(-3.2,2.3,-13.7,1.2,.6,.1,new THREE.MeshStandardMaterial({color:0x09090b}));box(3.5,1.6,-13.5,13.5,3.2,.5,mW);
-const d0=box(-1.5,1.2,-13.5,1.4,2.4,.18,new THREE.MeshStandardMaterial({color:0x451a03,roughness:.85})),sps=[];
-for(let i=0;i<3;i++){const s=box(-3.2,.38+i*.72,-13.1+i*.12,.8,.75,.15,new THREE.MeshStandardMaterial({color:0x78350f,roughness:.85}));s.visible=false;sps.push(s)}
-box(0,-4.2,-18,28,.3,24,mF);box(0,-2.6,-14,26,3.2,.4,mW);box(0,-2.6,-22,26,3.2,.4,mW);box(-3,-2.4,-14.25,1.2,.8,.05,mA);box(4,-2.4,-14.25,1.2,.8,.05,mA);box(11.5,-3.2,-18,2.5,1.8,2.5,new THREE.MeshStandardMaterial({color:0x57534e,roughness:.85}));
-const bac=new THREE.Mesh(new THREE.CylinderGeometry(.05,.07,2.3,10),new THREE.MeshStandardMaterial({color:0x09090b}));bac.position.set(-10,-3,-18);bac.visible=false;wg.add(bac);
-addL(0,3,-2,0xfffef0,2.8,30);addL(-6,3,-9,0xfffef0,2.5,30);addL(6,3,-9,0xfffef0,2.5,30);addL(0,3,-17,0xfffef0,2.6,30);addL(0,-1.2,-18,0xfffef0,2.4,30);
-spIt("ladder",-7.5,.2,-1.5);spIt("ladder",7.5,.2,-8.5);spIt("ladder",1.2,.2,-2);spIt("key",-3.2,2.25,-13.4);spIt("water",-7,.2,-9);
-ld={sps,pl:0,d0,op:false,pit:false,bac};setLampHum(true);addChatMsg("Уровень 0: Соберите 3 части лестницы под нишу с ключом");
-}
 
+// УРОВЕНЬ 0 по твоей карте: справа лабиринт со спавном, сверху ниша с приставной лестницей, слева зал с квадратными ямами
+function lvl0(){
+clr();st="L0";scene.background=new THREE.Color(0x211e0f);scene.fog=new THREE.FogExp2(0x211e0f,.028);
+rig.position.set(6,1.65,2);yaw=0;pitch=0;addSoftRoomLight(.75);
+
+// Пол и потолок основной зоны (справа и вверху карты)
+box(2,-.1,-3,22,.2,22,mF,false);box(-6,3.3,-6,38,.2,28,mCeil,false);
+// Внешние стены и колонны правого зала
+box(2,1.6,7.8,22,3.2,.4,mW);box(12.8,1.6,-3,.4,3.2,22,mW);box(2,1.6,-13.8,22,3.2,.4,mW);
+box(-8.8,1.6,2.2,.4,3.2,11,mW);box(-8.8,1.6,-10.5,.4,3.2,6.5,mW);
+// Колонны как на карте в нижней правой части
+for(let cx=2;cx<=10;cx+=4)for(let cz=-1;cz<=5;cz+=3)box(cx,1.6,cz,.8,3.2,.8,mW);
+box(-3,1.6,-3,.4,3.2,8,mW);box(3,1.6,-7,6,3.2,.4,mW);
+
+// Высокая ниша для приставной лестницы и дверь в левый зал с ямами
+box(-8.8,1,-6.2,.5,2,2.2,mW);box(-8.8,2.9,-6.2,.5,.6,2.2,mW);
+box(-9.1,2.3,-6.2,.1,.6,1.2,new THREE.MeshStandardMaterial({color:0x09090b}),false);
+const d0=box(-8.8,1.2,-4.1,.25,2.4,1.6,new THREE.MeshStandardMaterial({color:0x451a03,roughness:.85}),true);
+
+// Приставная лестница из 3 секций (стойки + перекладины)
+const ladGroup=new THREE.Group();ladGroup.position.set(-8.2,0,-6.2);ladGroup.visible=false;wg.add(ladGroup);
+const woodM=new THREE.MeshStandardMaterial({color:0x78350f,roughness:.85});
+const railL=new THREE.Mesh(new THREE.BoxGeometry(.08,2.2,.08),woodM);railL.position.set(0,1.1,-.32);railL.rotation.z=.22;
+const railR=railL.clone();railR.position.z=.32;ladGroup.add(railL,railR);
+const rungs=[];
+for(let i=0;i<6;i++){const rg=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.68,8),woodM);rg.rotation.x=Math.PI/2;rg.position.set(-.18+i*.07,.35+i*.32,0);rg.visible=false;ladGroup.add(rg);rungs.push(rg)}
+
+// ЛЕВАЯ ЗОНА КАРТЫ: Зал с сеткой 4x4 квадратных ям и узкими перемычками + выход в самом левом торце
+const pitHoles=[];
+for(let gx=0;gx<4;gx++){
+for(let gz=0;gz<4;gz++){
+const px=-11.5-gx*2.6,pz=-1.5-gz*2.6;
+// Узкие перемычки-мостики вокруг каждой квадратной ямы
+box(px,-.1,pz-1.3,2.6,.2,.55,mF,false);box(px,-.1,pz+1.3,2.6,.2,.55,mF,false);
+box(px-1.3,-.1,pz,.55,.2,2.6,mF,false);box(px+1.3,-.1,pz,.55,.2,2.6,mF,false);
+pitHoles.push({x:px,z:pz,r:.85});
+}
+}
+// Стены зала с ямами и выход слева
+box(-15.5,1.6,.5,13,3.2,.4,mW);box(-15.5,1.6,-11.2,13,3.2,.4,mW);
+box(-21.8,1.6,-2.5,.4,3.2,6,mW);box(-21.8,1.6,-9,.4,3.2,4.5,mW);
+box(-23.5,-.1,-5.8,3.6,.2,3.2,mF,false);box(-25.2,1.6,-5.8,.4,3.2,3.2,mW);
+const exitL0=box(-24.9,1.3,-5.8,.15,2.4,1.3,mExit,false);
+addPropBtn(exitL0,()=>lvl1(),"Выход на Уровень 1");
+
+// Нижний ярус под квадратными ямами (без спойлеров при падении!) + подъем справа внизу
+box(-15,-4.2,-5.8,24,.3,20,mF,false);box(-15,-2.6,2.5,22,3.2,.4,mW);box(-15,-2.6,-13.5,22,3.2,.4,mW);
+box(-25.5,-2.6,-5.8,.4,3.2,16,mW);box(-4.2,-2.6,-5.8,.4,3.2,16,mW);
+const subExit=box(-4.5,-2.8,-5.8,.15,2.4,1.4,mExit,false);
+addPropBtn(subExit,()=>lvl1(),"Выход из нижнего сектора");
+
+const bac=new THREE.Mesh(new THREE.CylinderGeometry(.06,.08,2.3,10),new THREE.MeshStandardMaterial({color:0x09090b}));
+bac.position.set(-22,-3,-10);bac.visible=false;wg.add(bac);
+
+addL(6,2.9,1,0xfef9c3,1.2,22);addL(2,2.9,-9,0xfef9c3,1.2,22);addL(-6,2.9,-5,0xfef9c3,1.15,22);addL(-15,2.9,-5.8,0xfef9c3,1.2,24);addL(-14,-1.2,-5.8,0xfef9c3,.95,22);
+spIt("ladder",9.5,.2,4.5);spIt("ladder",1.5,.2,-11.5);spIt("ladder",-1.2,.2,3.2);
+spIt("key",-8.65,2.25,-6.2);spIt("water",8.5,.2,-9.5);
+
+ld={ladGroup,rungs,pl:0,d0,op:false,pit:false,pitHoles,bac};
+setLampHum(true);
+addChatMsg("Уровень 0: Найдите 3 части приставной лестницы и ключ");
+}
 function lvl1(){
-unlk(1);clr();st="L1";setLampHum(false);scene.background=new THREE.Color(0x283242);scene.fog=new THREE.FogExp2(0x283242,.02);rig.position.set(0,1.65,8);yaw=pitch=0;addBrightCeilingLight(1.65);
-const fl=new THREE.MeshStandardMaterial({color:0x262f3d,roughness:.9,metalness:0});box(0,-.1,-6,24,.2,34,fl);box(0,3.4,-6,24,.2,34,mC);box(0,1.6,10,24,3.2,.4,mC);box(0,1.6,-22,24,3.2,.4,mC);
-addL(0,3.1,4,0xf8fafc,2.6,32);addL(0,3.1,-8,0xf8fafc,2.6,32);addL(0,3.1,-18,0xf8fafc,2.5,32);
+unlk(1);clr();st="L1";setLampHum(false);scene.background=new THREE.Color(0x161b24);scene.fog=new THREE.FogExp2(0x161b24,.026);rig.position.set(0,1.65,8);yaw=pitch=0;addSoftRoomLight(.75);
+const fl=new THREE.MeshStandardMaterial({color:0x262f3d,roughness:.9});box(0,-.1,-6,24,.2,34,fl,false);box(0,3.4,-6,24,.2,34,mC,false);
+box(0,1.6,10.5,24,3.2,.4,mC);box(0,1.6,-22.5,24,3.2,.4,mC);box(-11.8,1.6,-6,.4,3.2,34,mC);box(11.8,1.6,-6,.4,3.2,34,mC);
+addL(0,3.1,4,0xe2e8f0,1.3,24);addL(0,3.1,-8,0xe2e8f0,1.3,24);addL(0,3.1,-18,0xe2e8f0,1.2,24);
 const cols=[{n:"КРАСНЫЙ",h:"#ef4444",c:0xef4444},{n:"СИНИЙ",h:"#3b82f6",c:0x3b82f6},{n:"ЗЕЛЁНЫЙ",h:"#22c55e",c:0x22c55e},{n:"ЖЁЛТЫЙ",h:"#eab308",c:0xeab308}].sort(()=>Math.random()-.5);
 const pos=[{x:-7,z:4},{x:7,z:4},{x:-7,z:-4},{x:7,z:-4},{x:-7,z:-12},{x:7,z:-12}];let ci=0;
 pos.forEach((p,i)=>{box(p.x,1.6,p.z-2.5,6,3.2,.3,mC);box(p.x,1.6,p.z+2.5,6,3.2,.3,mC);if(i===1||i===4)box(p.x,.6,p.z,3.5,1.1,1.8,new THREE.MeshStandardMaterial({color:0x64748b,roughness:.85}));else if(ci<4){const cl=cols[ci];box(p.x,.6,p.z,3.5,1,1.7,new THREE.MeshStandardMaterial({color:cl.c,roughness:.5}));const sg=new THREE.Mesh(new THREE.CircleGeometry(.5,20),new THREE.MeshStandardMaterial({map:mkTex("s","№"+(ci+1),"#0f172a",cl.h)}));sg.position.set(p.x>0?p.x-2.8:p.x+2.8,1.8,p.z);sg.rotation.y=p.x>0?-Math.PI/2:Math.PI/2;wg.add(sg);ci++}});
-const ent=[];cols.forEach((c,i)=>addB(-1.5+i,1.5,-21.6,.8,.45,c.n,c.h,"#fff",()=>{ent.push(c.n);addChatMsg(c.n+" ("+ent.length+"/4)");if(ent.length===4){if(ent.every((v,k)=>v===cols[k].n)){addChatMsg("КОД ВЕРНЫЙ!");setTimeout(lvl2,1200)}else{ent.length=0;addChatMsg("НЕВЕРНО! Введите снова","#ef4444")}}},`Кнопка: ${c.n}`));
+const ent=[];cols.forEach((c,i)=>addB(-1.5+i,1.5,-22.2,.8,.45,c.n,c.h,"#fff",()=>{ent.push(c.n);addChatMsg(c.n+" ("+ent.length+"/4)");if(ent.length===4){if(ent.every((v,k)=>v===cols[k].n)){addChatMsg("КОД ВЕРНЫЙ!");setTimeout(lvl2,1200)}else{ent.length=0;addChatMsg("НЕВЕРНО! Введите снова","#ef4444")}}},`Кнопка: ${c.n}`));
 spIt("water",0,.2,0);addChatMsg("Уровень 1: Запомните цвета машин №1–№4 и введите у лифта");
 }
 
 function lvl2(){
-unlk(2);clr();st="L2";rig.position.set(0,1.65,9);yaw=pitch=0;addBrightCeilingLight(1.65);const fl=new THREE.MeshStandardMaterial({color:0x262f3d,roughness:.9});
-box(0,-.1,-5,24,.2,32,fl);box(0,3.4,-5,24,.2,32,mC);addL(0,3.1,4,0xf8fafc,2.6,32);addL(0,3.1,-10,0xf8fafc,2.6,32);
-[{x:-7,z:4},{x:7,z:4},{x:-7,z:-4},{x:7,z:-4},{x:-7,z:-11}].forEach(p=>{box(p.x,1.6,p.z-2.2,5,3.2,.3,mC);box(p.x,1.6,p.z+2.2,5,3.2,.3,mC);box(p.x>0?p.x-2.4:p.x+2.4,1.3,p.z+1.2,.15,2.6,1.4,mG);spIt("key",p.x,.4,p.z)});
-box(0,.01,-18,8,.2,6,new THREE.MeshStandardMaterial({color:0xdbeafe,roughness:.8}));const dr=box(0,1.4,-15,2,2.8,.2,mG);box(0,1.4,-21,1.6,2.6,.25,new THREE.MeshStandardMaterial({color:0x1e293b}));
+unlk(2);clr();st="L2";rig.position.set(0,1.65,9);yaw=pitch=0;addSoftRoomLight(.75);const fl=new THREE.MeshStandardMaterial({color:0x262f3d,roughness:.9});
+box(0,-.1,-5,24,.2,32,fl,false);box(0,3.4,-5,24,.2,32,mC,false);box(-11.8,1.6,-5,.4,3.2,32,mC);box(11.8,1.6,-5,.4,3.2,32,mC);box(0,1.6,10.8,24,3.2,.4,mC);box(0,1.6,-21.2,24,3.2,.4,mC);
+addL(0,3.1,4,0xe2e8f0,1.3,24);addL(0,3.1,-10,0xe2e8f0,1.3,24);
+[{x:-7,z:4},{x:7,z:4},{x:-7,z:-4},{x:7,z:-4},{x:-7,z:-11}].forEach(p=>{box(p.x,1.6,p.z-2.2,5,3.2,.3,mC);box(p.x,1.6,p.z+2.2,5,3.2,.3,mC);box(p.x>0?p.x-2.4:p.x+2.4,1.3,p.z+1.2,.15,2.6,1.4,mC);spIt("key",p.x,.4,p.z)});
+const dr=box(0,1.4,-15,2,2.8,.2,mC);dr.position.x=2.2;
 addB(-1.5,1.5,-15.3,.85,.42,"ЗАКРЫТЬ","#ef4444","#fff",()=>{dr.position.x=0;addChatMsg("Шлюз закрыт!")},"Кнопка шлюза");
-addB(1.3,1.5,-20.7,.95,.45,"ДВЕРЬ (5 КЛ)","#22c55e","#fff",()=>{if(ld.kc>=5)lvl3();else addChatMsg("Ключей: "+ld.kc+"/5")},"Гермодверь");
+addB(1.3,1.5,-20.9,.95,.45,"ДВЕРЬ (5 КЛ)","#22c55e","#fff",()=>{if(ld.kc>=5)lvl3();else addChatMsg("Ключей: "+ld.kc+"/5")},"Гермодверь");
 const ss=new THREE.Mesh(new THREE.CylinderGeometry(.2,.18,2,14),new THREE.MeshStandardMaterial({color:0x991b1b}));ss.position.set(5,1,-8);wg.add(ss);ld={kc:0,ss};addChatMsg("Уровень 2: Соберите 5 ключей от Кожекрада и закройте шлюз");
 }
 
+// УРОВЕНЬ 3: Тёмная парковка с зелёной дверью EXIT в Центральный Хаб
 function lvl3(){
-unlk(3);clr();st="L3";rig.position.set(0,1.65,8);yaw=pitch=0;scene.background=new THREE.Color(0x0c0e14);scene.fog=new THREE.FogExp2(0x0c0e14,.085);
-const fl=new THREE.MeshStandardMaterial({color:0x1e293b,roughness:.9});box(0,-.1,-6,22,.2,30,fl);box(0,3.2,-6,22,.2,30,fl);addL(7.5,2.8,-17,0xfef08a,1.8,16);
-addB(7.5,1.5,-18,1,.6,"ЛИФТ","#d4b24c","#12110e",()=>lvl4(),"Вызов лифта");addChatMsg("Уровень 3: Тёмная парковка. Найдите лифт наверх");
+unlk(3);clr();st="L3";rig.position.set(0,1.65,8);yaw=pitch=0;scene.background=new THREE.Color(0x090b10);scene.fog=new THREE.FogExp2(0x090b10,.085);
+const fl=new THREE.MeshStandardMaterial({color:0x1e293b,roughness:.9});box(0,-.1,-6,22,.2,30,fl,false);box(0,3.2,-6,22,.2,30,fl,false);
+box(-10.8,1.6,-6,.4,3.2,30,mC);box(10.8,1.6,-6,.4,3.2,30,mC);box(0,1.6,9,22,3.2,.4,mC);box(0,1.6,-20.5,22,3.2,.4,mC);
+addL(7.5,2.8,-18,0x10b981,1.3,14);
+const hubDoor=box(7.5,1.3,-20.2,1.4,2.6,.18,mExit,false);
+addPropBtn(hubDoor,()=>lvlHub(),"Дверь EXIT (В Хаб)");
+addChatMsg("Уровень 3: Найдите зелёную дверь EXIT в Центральный Хаб");
 }
 
+// ЦЕНТРАЛЬНЫЙ ХАБ (по твоим 4 фото: туннель -> зелёный коридор -> диспетчерская с ПК -> ворота-рольставни)
+function lvlHub(){
+clr();st="HUB";setLampHum(false);scene.background=new THREE.Color(0x181512);scene.fog=new THREE.FogExp2(0x181512,.03);
+rig.position.set(0,1.65,12);yaw=0;pitch=0;addSoftRoomLight(.65);
+const road=new THREE.MeshStandardMaterial({color:0x27272a,roughness:.9});
+// Главный сводчатый туннель Хаба
+box(0,-.1,-6,8,.2,40,road,false);box(0,3.8,-6,8.4,.3,40,mC,false);
+box(-4,1.9,4,.4,3.8,20,mC);box(-4,1.9,-16,.4,3.8,14,mC);
+box(4,1.9,-6,.4,3.8,40,mC);box(0,1.9,14,8.4,3.8,.4,mC);
+for(let z=8;z>=-22;z-=6){addL(-2.8,3.1,z,0xf59e0b,1.1,14);addL(2.8,3.1,z,0xf59e0b,1.1,14)}
+
+// Салатово-зелёный коридор слева -> Диспетчерская комната с компьютерами
+box(-10,-.1,-7.5,12,.2,4.2,mC,false);box(-10,3.3,-7.5,12,.2,4.2,mC,false);
+box(-10,1.6,-5.4,12,3.2,.4,mGr);box(-10,1.6,-9.6,12,3.2,.4,mGr);
+// Диспетчерская комната с ПК
+box(-19,-.1,-7.5,7,.2,9,mF,false);box(-19,3.3,-7.5,7,.2,9,mCeil,false);
+box(-22.5,1.6,-7.5,.4,3.2,9,mC);box(-19,1.6,-12,7,3.2,.4,mC);box(-19,1.6,-3,7,3.2,.4,mC);
+addL(-19,2.9,-7.5,0xe2e8f0,1.2,16);
+box(-21,0.45,-7.5,1.2,.85,2.4,mC,true);
+const pcMon=box(-21,1.15,-7.5,.18,.6,.8,mPc,false);
+
+// Массивные ворота-рольставни в конце туннеля Хаба (к Улыбашкам)
+const gateMesh=box(0,1.7,-25.5,7.6,3.4,.35,mGate,true);
+let gateOpen=false;
+addPropBtn(pcMon,()=>{
+if(gateOpen)return;gateOpen=true;gateMesh.position.y=4.8;if(gateMesh.userData.col)gateMesh.userData.col.active=false;
+addChatMsg("Ворота-рольставни в конце туннеля открыты!","#7dd3fc");
+},"ПК: Открыть ворота");
+const toSmilers=box(0,1.4,-26.2,3.2,2.8,.2,new THREE.MeshStandardMaterial({color:0x050507}),false);
+addPropBtn(toSmilers,()=>{if(gateOpen)lvl4();else addChatMsg("Ворота закрыты! Активируйте ПК в диспетчерской","#ef4444")},"Пройти в тёмный сектор");
+addChatMsg("Центральный Хаб: Найдите диспетчерскую по зелёному коридору слева");
+}
+
+// ПАРКОВКА С УЛЫБАШКАМИ: комнаты со светом по бокам, в 1 случайной — выход, в остальных — ящики с водой
 function lvl4(){
-unlk(4);clr();st="L4";rig.position.set(0,1.65,10);yaw=pitch=0;scene.background=new THREE.Color(0x283242);scene.fog=new THREE.FogExp2(0x283242,.02);addBrightCeilingLight(1.65);
-const fl=new THREE.MeshStandardMaterial({color:0x1e293b,roughness:.88});box(0,-.1,-8,26,.2,38,fl);const cl=addL(0,3.1,-8,0xffffff,2.4,38),gt=box(0,1.6,4,8,3.2,.3,new THREE.MeshStandardMaterial({color:0x475569}));let un=false;
-addB(-7.5,1.5,6,1.1,.45,"ПК: ВОРОТА","#38bdf8","#12110e",()=>{un=true;gt.visible=false;addChatMsg("Ворота открыты! Бегите мимо колонн 1–5")},"Терминал ворот");
-for(let i=1;i<=5;i++){const z=1-i*4.2,cm=new THREE.Mesh(new THREE.CylinderGeometry(.65,.65,3.2,20),mC);cm.position.set(-3.5,1.6,z);wg.add(cm);const ns=new THREE.Mesh(new THREE.CircleGeometry(.45,20),new THREE.MeshStandardMaterial({map:mkTex("s",""+i,"#334155","#fff")}));ns.position.set(-3.5,2,z+.66);wg.add(ns)}
-box(5,1.6,-16,6,3.2,.3,mC);box(5,1.4,-18.8,1.5,2.6,.2,new THREE.MeshStandardMaterial({color:0x22c55e}));
-const sm=new THREE.Mesh(new THREE.CircleGeometry(.35,20),new THREE.MeshBasicMaterial({map:mkTex("s",":)","#000","#fff")}));sm.position.set(3,1.5,-6);wg.add(sm);
-ld={cl,sm,un:()=>un,fin:false};addChatMsg("Уровень 4: Откройте ворота на ПК слева!");
+unlk(4);clr();st="L4";rig.position.set(0,1.65,12);yaw=pitch=0;
+scene.background=new THREE.Color(0x0b0d12);scene.fog=new THREE.FogExp2(0x0b0d12,.045);
+const fl=new THREE.MeshStandardMaterial({color:0x1e293b,roughness:.9});
+box(0,-.1,-6,26,.2,40,fl,false);box(0,3.3,-6,26,.2,40,mC,false);
+box(0,1.6,14,26,3.2,.4,mC);box(0,1.6,-26,26,3.2,.4,mC);
+const cl=addL(0,3.0,-6,0xe2e8f0,1.35,34);
+
+// 6 комнат с двумя дверями по обеим сторонам парковки (3 слева, 3 справа)
+const roomsCfg=[{x:-9.5,z:6,s:1},{x:-9.5,z:-6,s:1},{x:-9.5,z:-18,s:1},{x:9.5,z:6,s:-1},{x:9.5,z:-6,s:-1},{x:9.5,z:-18,s:-1}];
+const exitIdx=Math.floor(Math.random()*roomsCfg.length); // Меняется при каждой смерти!
+box(-13,1.6,-6,.4,3.2,40,mC);box(13,1.6,-6,.4,3.2,40,mC);
+
+roomsCfg.forEach((rm,idx)=>{
+// Стены комнаты с 2 дверными проёмами (спереди и сзади по Z) и постоянным тёплым светом внутри
+box(rm.x,1.6,rm.z-3.8,6.6,3.2,.3,mC);box(rm.x,1.6,rm.z+3.8,6.6,3.2,.3,mC);
+const wallX=rm.x+rm.s*3.2;
+box(wallX,1.6,rm.z-2.6,.3,3.2,2.2,mC);box(wallX,1.6,rm.z+2.6,.3,3.2,2.2,mC);box(wallX,1.6,rm.z,.3,3.2,1.2,mC);
+addL(rm.x,2.8,rm.z,0xfef9c3,1.25,11); // Постоянный свет внутри комнаты
+
+const backX=rm.x-rm.s*2.8;
+if(idx===exitIdx){
+const exDoor=box(backX,1.3,rm.z,.2,2.6,1.4,mExit,false);
+addPropBtn(exDoor,()=>{ld.fin=true;document.getElementById("end").classList.add("on");setTimeout(toTermMenu,6500)},"Выход (Завершить бета-тест)");
+}else{
+const crate=box(backX,.55,rm.z,1.1,1.1,1.1,new THREE.MeshStandardMaterial({color:0x78350f,roughness:.85}),true);
+let looted=false;
+addPropBtn(crate,()=>{
+if(looted){addChatMsg("Ящик уже пуст");return}
+looted=true;
+if(Math.random()<.55){storeItem("water");playTone(520,780,.14,"triangle",.09);addChatMsg("В ящике найдена миндальная вода!","#7dd3fc")}
+else addChatMsg("В этом ящике ничего нет...","#94a3b8");
+},"Обыскать ящик");
+}
+});
+
+const sm=new THREE.Mesh(new THREE.CircleGeometry(.35,20),new THREE.MeshBasicMaterial({map:mkTex("s",":)","#000","#fff")}));
+sm.position.set(0,1.5,-10);wg.add(sm);
+ld={cl,sm,fin:false};
+addChatMsg("Парковка: Ищите выход в освещённых комнатах по бокам!");
 }
 const jz=document.getElementById("joy-zone"),js=document.getElementById("joy-stick");
 jz.addEventListener("touchstart",e=>{const t=e.changedTouches.item(0);joyId=t.identifier;updJoy(t)});
@@ -320,13 +611,14 @@ addEventListener("keyup",e=>{keys[e.code]=false;if(e.code==="ShiftLeft")sprint=f
 
 let sfxCtx=null,stepTimer=0,entityAudioTimer=0;
 function playTone(f1,f2,dur,tp="sine",vol=.08){try{if(!sfxCtx)sfxCtx=new(window.AudioContext||window.webkitAudioContext)();const o=sfxCtx.createOscillator(),g=sfxCtx.createGain();o.type=tp;o.frequency.setValueAtTime(f1,sfxCtx.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(20,f2),sfxCtx.currentTime+dur);g.gain.setValueAtTime(vol,sfxCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,sfxCtx.currentTime+dur);o.connect(g);g.connect(sfxCtx.destination);o.start();o.stop(sfxCtx.currentTime+dur+.02)}catch(e){}}
+
 function updateTargetPrompt(){
 const pr=document.getElementById("item-prompt"),bf=document.getElementById("btn-f");
 if(padOpen){pr.classList.remove("show");bf.classList.remove("show");return null}
 const ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2(0,0),camera);let obj=null,lbl="",fn=null;
-const bh=ray.intersectObjects(btns.map(b=>b.m));if(bh.length&&bh.at(0).distance<3.6){const b=btns.find(x=>x.m===bh.at(0).object);if(b){obj=b.m;lbl=b.label;fn=b.fn}}
-if(!obj){const ai=itms.filter(it=>!it.tk&&rig.position.distanceTo(it.m.position)<2.6),ih=ray.intersectObjects(ai.map(it=>it.m));if(ih.length){const it=ai.find(x=>x.m===ih.at(0).object);if(it){obj=it.m;lbl=it.label;fn=()=>{if(it.tp==="key"&&st==="L0"&&ld.pl<3){addChatMsg("Слишком высоко! Нужна лестница","#ef4444");return}if(it.tp==="key"&&st==="L2"){it.tk=true;it.m.visible=false;ld.kc++;playTone(520,780,.14,"triangle",.09);addChatMsg("Ключ собран: "+ld.kc+"/5");return}if(storeItem(it.tp)){it.tk=true;it.m.visible=false;playTone(520,780,.14,"triangle",.09);addChatMsg("Подобрано: "+it.label)}}}}}
-if(!obj&&st==="L0"){const cur=invState.main;if(cur==="ladder"&&Math.hypot(rig.position.x+3.2,rig.position.z+12.5)<2.8){obj=ld.sps.at(0);lbl="Установить ступеньку";fn=()=>{ld.sps.at(ld.pl).visible=true;ld.pl++;invState.main=null;renderInv();playTone(260,420,.15,"triangle",.08);addChatMsg("Ступенька установлена ("+ld.pl+"/3)")}}else if(cur==="key"&&!ld.op&&Math.hypot(rig.position.x+1.5,rig.position.z+13)<2.4){obj=ld.d0;lbl="Открыть дверь ключом";fn=()=>{ld.op=true;invState.main=null;renderInv();ld.d0.visible=false;playTone(380,180,.25,"sawtooth",.08);addChatMsg("Дверь открыта! Впереди квадратная яма")}}}
+const bh=ray.intersectObjects(btns.map(b=>b.m));if(bh.length&&bh.at(0).distance<3.5){const b=btns.find(x=>x.m===bh.at(0).object);if(b){obj=b.m;lbl=b.label;fn=b.fn}}
+if(!obj){const ai=itms.filter(it=>!it.tk&&rig.position.distanceTo(it.m.position)<2.6),ih=ray.intersectObjects(ai.map(it=>it.m));if(ih.length){const it=ai.find(x=>x.m===ih.at(0).object);if(it){obj=it.m;lbl=it.label;fn=()=>{if(it.tp==="key"&&st==="L0"&&ld.pl<3){addChatMsg("Слишком высоко! Установите приставную лестницу","#ef4444");return}if(it.tp==="key"&&st==="L2"){it.tk=true;it.m.visible=false;ld.kc++;playTone(520,780,.14,"triangle",.09);addChatMsg("Ключ собран: "+ld.kc+"/5");return}if(storeItem(it.tp)){it.tk=true;it.m.visible=false;playTone(520,780,.14,"triangle",.09);addChatMsg("Подобрано: "+it.label)}}}}}
+if(!obj&&st==="L0"){const cur=invState.main;if(cur==="ladder"&&Math.hypot(rig.position.x+8.2,rig.position.z+6.2)<2.8){obj=ld.ladGroup;lbl="Установить часть лестницы";fn=()=>{ld.ladGroup.visible=true;ld.rungs[ld.pl*2].visible=true;ld.rungs[ld.pl*2+1].visible=true;ld.pl++;invState.main=null;renderInv();playTone(260,420,.15,"triangle",.08);addChatMsg("Секция лестницы установлена ("+ld.pl+"/3)")}}else if(cur==="key"&&!ld.op&&Math.hypot(rig.position.x+8.2,rig.position.z+4.1)<2.5){obj=ld.d0;lbl="Открыть дверь ключом";fn=()=>{ld.op=true;invState.main=null;renderInv();ld.d0.visible=false;if(ld.d0.userData.col)ld.d0.userData.col.active=false;playTone(380,180,.25,"sawtooth",.08);addChatMsg("Дверь открыта!")}}}
 if(obj){bf.classList.add("show");const wp=new THREE.Vector3();obj.getWorldPosition(wp);wp.y+=.35;wp.project(camera);if(wp.z<1){const w=document.documentElement.clientWidth||innerWidth,h=document.documentElement.clientHeight||innerHeight;pr.style.left=((wp.x*.5+.5)*w)+"px";pr.style.top=((-(wp.y*.5)+.5)*h)+"px";document.getElementById("ip-name").innerText=lbl;pr.classList.add("show")}}else{pr.classList.remove("show");bf.classList.remove("show")}
 return fn;
 }
@@ -337,8 +629,16 @@ if(!active){if(st==="MENU"){camera.rotation.order="YXZ";camera.rotation.y=yaw+Ma
 if(!padOpen){let kx=0,ky=0;if(keys.KeyW||keys.ArrowUp)ky-=1;if(keys.KeyS||keys.ArrowDown)ky+=1;if(keys.KeyA||keys.ArrowLeft)kx-=1;if(keys.KeyD||keys.ArrowRight)kx+=1;if(kx||ky){const l=Math.hypot(kx,ky);joyX=kx/l;joyY=ky/l}else if(!joyId){joyX=joyY=0}}
 camera.rotation.order="YXZ";camera.rotation.y=yaw;camera.rotation.x=pitch;cr+=((crouch?-.65:0)-cr)*.15;
 currentAction=updateTargetPrompt();
+
+// Движение с проверкой коллизий стен по X и Z раздельно (нельзя пройти сквозь стены)
 const mv=!padOpen&&Math.hypot(joyX,joyY)>.08,rn=mv&&sprint&&!crouch,spd=(rn?.098:mv?.05:0)*(bst>0?1.35:1);
-if(mv){const f=-joyY*spd,s=joyX*spd;rig.position.x+=-Math.sin(yaw)*f+Math.cos(yaw)*s;rig.position.z+=-Math.cos(yaw)*f-Math.sin(yaw)*s;stepTimer++;if(stepTimer>=(rn?16:26)){stepTimer=0;playTone(110,55,.09,"triangle",rn?.08:.045)}}
+if(mv){
+const f=-joyY*spd,s=joyX*spd,dx=-Math.sin(yaw)*f+Math.cos(yaw)*s,dz=-Math.cos(yaw)*f-Math.sin(yaw)*s;
+if(!checkWallHit(rig.position.x+dx,rig.position.z,rig.position.y))rig.position.x+=dx;
+if(!checkWallHit(rig.position.x,rig.position.z+dz,rig.position.y))rig.position.z+=dz;
+stepTimer++;if(stepTimer>=(rn?16:26)){stepTimer=0;playTone(110,55,.09,"triangle",rn?.08:.045)}
+}
+
 idlePhase+=.035;sprintBlend+=((rn?1:0)-sprintBlend)*.12;if(rn)sprintPhase+=.24;
 const wL=Math.sin(sprintPhase),wR=Math.sin(sprintPhase+Math.PI);
 sprintArmL.visible=sprintArmR.visible=sprintBlend>.02;
@@ -348,17 +648,23 @@ sprintArmL.rotation.x=sprintBlend*wL*.35;sprintArmR.rotation.x=sprintBlend*wR*.3
 camera.position.y=cr+(1-sprintBlend)*Math.sin(idlePhase)*.015+sprintBlend*Math.abs(Math.sin(sprintPhase))*.045;
 camera.rotation.z=(1-sprintBlend)*Math.cos(idlePhase*.7)*.006+sprintBlend*Math.sin(sprintPhase)*.018;
 if(fr.visible){fr.position.lerp(fr.userData.tp,.18);fr.rotation.y+=(fr.userData.ty-fr.rotation.y)*.18;if(fr.userData.wk){fr.userData.wp+=.15;const s=Math.sin(fr.userData.wp)*.4;fr.userData.lL.rotation.x=s;fr.userData.lR.rotation.x=-s}}
+
 entityAudioTimer++;
-if(st==="L0"){if(!ld.pit&&ld.op&&Math.abs(rig.position.x)<1.2&&Math.abs(rig.position.z+18)<1.2){ld.pit=true;rig.position.y=-2.35;ld.bac.visible=true;addChatMsg("ВЫ УПАЛИ В ЯМУ! Бегите по стрелочкам вправо!","#ef4444")}if(ld.pit){const bx=rig.position.x-ld.bac.position.x,bz=rig.position.z-ld.bac.position.z,d=Math.hypot(bx,bz);if(d>.4){ld.bac.position.x+=bx/d*.042;ld.bac.position.z+=bz/d*.042}if(entityAudioTimer%28===0)playTone(95,42,.25,"sawtooth",Math.min(.18,.45/Math.max(1,d)));if(rig.position.x>11)lvl1()}}
-else if(st==="L2"&&entityAudioTimer%95===0){playTone(210,145,.35,"sawtooth",.04);setTimeout(()=>playTone(165,230,.28,"triangle",.035),260)}
-else if(st==="L4"&&!ld.fin){const on=Math.sin(Date.now()*.002)>-.2;ld.cl.intensity=on?2.4:.08;if(!on&&ld.un()){const sx=rig.position.x-ld.sm.position.x,sz=rig.position.z-ld.sm.position.z,sd=Math.hypot(sx,sz);if(sd>.5){ld.sm.position.x+=sx/sd*.055;ld.sm.position.z+=sz/sd*.055}if(entityAudioTimer%24===0)playTone(880,1250,.18,"sine",Math.min(.14,.35/Math.max(1,sd)))}if(Math.hypot(rig.position.x-5,rig.position.z+18.5)<1.5){ld.fin=true;document.getElementById("end").classList.add("on");setTimeout(toTermMenu,6500)}}
+if(st==="L0"){
+if(!ld.pit){for(let h of ld.pitHoles)if(Math.hypot(rig.position.x-h.x,rig.position.z-h.z)<h.r){ld.pit=true;rig.position.y=-2.35;ld.bac.visible=true;break}}
+if(ld.pit){const bx=rig.position.x-ld.bac.position.x,bz=rig.position.z-ld.bac.position.z,d=Math.hypot(bx,bz);if(d>.4){ld.bac.position.x+=bx/d*.044;ld.bac.position.z+=bz/d*.044}if(entityAudioTimer%26===0)playTone(95,42,.25,"sawtooth",Math.min(.18,.45/Math.max(1,d)));if(dplayTone(165,230,.28,"triangle",.035),260)}
+else if(st==="L4"&&!ld.fin){
+const on=Math.sin(Date.now()*.002)>-.2;ld.cl.intensity=on?1.35:.04;
+const inSafeRoom=Math.abs(rig.position.x)>6.2;
+if(!on&&!inSafeRoom){const sx=rig.position.x-ld.sm.position.x,sz=rig.position.z-ld.sm.position.z,sd=Math.hypot(sx,sz);if(sd>.4){ld.sm.position.x+=sx/sd*.06;ld.sm.position.z+=sz/sd*.06}if(entityAudioTimer%22===0)playTone(880,1250,.18,"sine",Math.min(.14,.35/Math.max(1,sd)));if(sd<.85){addChatMsg("Улыбашка поймала вас в темноте! Двери перемешаны заново","#ef4444");lvl4()}}
+}
+
 if(bst>0)bst--;if(st.startsWith("L"))san=Math.max(0,san-.006);
 const rt=san/100,col=rt>.5?"#22c55e":rt>.25?"#eab308":"#ef4444";
 document.getElementById("san-fill").style.height=Math.max(5,rt*100)+"%";document.getElementById("san-fill").style.background=col;document.getElementById("san-pct").style.color=col;document.getElementById("san-pct").innerText=Math.ceil(san)+"%";
 document.getElementById("vig").style.boxShadow=`inset 0 0 ${Math.floor((1-rt)*120)}px rgba(0,0,0,.95)`;
 renderer.render(scene,camera);
 }
-buildMenuBackdrop();
 (function loop(){requestAnimationFrame(loop);tick()})();
 </script>
 </body>
