@@ -231,13 +231,11 @@ function dismissIntro(){
 function exitToIntro(){document.getElementById("main-menu").classList.remove("on");const s=document.getElementById("intro-scr");s.classList.remove("off");introStep=1;document.getElementById("intro-logo").style.display="none";document.getElementById("intro-warn").style.display="block";document.getElementById("intro-tap").style.display="block";st="INTRO";}
 
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x211e0f);scene.fog=new THREE.FogExp2(0x211e0f,.028);
-const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.05,130),rig=new THREE.Group();rig.position.set(0,1.65,3.2);rig.add(camera);scene.add(rig);
+const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.05,130),rig=new THREE.Group();rig.position.set(0,1.65,3.2);rig.add(camera);scene.add(rig);rig.add(new THREE.PointLight(0xfffbeb, 1.4, 25));
 
 // Улучшенная графика: мягкие тени PCFSoftShadowMap и киношный тонмаппинг ACESFilmic с бликами
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
 renderer.shadowMap.enabled=false;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.18;
 
 function updateViewportQuality(){const w=document.documentElement.clientWidth||innerWidth,h=document.documentElement.clientHeight||innerHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2.2));renderer.setSize(w,h,false);}
 updateViewportQuality();addEventListener("resize",updateViewportQuality);addEventListener("orientationchange",()=>setTimeout(updateViewportQuality,120));
@@ -253,7 +251,7 @@ function mkTex(tp,txt="",bg="#cbd5e1",fg="#0f172a"){
   else if(tp==="gate"){g.fillStyle="#334155";g.fillRect(0,0,512,512);g.fillStyle="#1e293b";for(let y=0;y<512;y+=24)g.fillRect(0,y,512,10);}
   else if(tp==="pc"){g.fillStyle="#1e293b";g.fillRect(0,0,512,512);g.fillStyle="#38bdf8";g.fillRect(60,60,392,260);g.fillStyle="#0f172a";g.font="bold 38px sans-serif";g.textAlign="center";g.fillText("GATE CONTROL",256,200);}
   else{g.fillStyle=bg;g.fillRect(0,0,512,512);g.strokeStyle=fg;g.lineWidth=18;g.strokeRect(18,18,476,476);g.fillStyle=fg;g.font="bold 64px sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(txt,256,256);}
-  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t;
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=1;return t;
 }
 
 const mW=new THREE.MeshStandardMaterial({map:mkTex("w"),roughness:.58,metalness:.14});
@@ -265,7 +263,7 @@ const mC=new THREE.MeshStandardMaterial({map:mkTex("c"),roughness:.68,metalness:
 const texLoader=new THREE.TextureLoader();
 function bindCustomTexture(names,mat,rx,ry,idx=0){
   if(idx>=names.length)return;
-  texLoader.load(names[idx],t=>{t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);t.anisotropy=8;mat.map=t;mat.needsUpdate=true;},undefined,()=>bindCustomTexture(names,mat,rx,ry,idx+1));
+  texLoader.load(names[idx],t=>{t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);t.anisotropy=1;mat.map=t;mat.needsUpdate=true;},undefined,()=>bindCustomTexture(names,mat,rx,ry,idx+1));
 }
 bindCustomTexture(["./wall_0.png","./wall_0.jpg","./Wall_0.png"],mW,4,1);
 bindCustomTexture(["./carpet_0.png","./carpet_0.jpg","./Carpet_0.png"],mF,10,10);
