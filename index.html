@@ -858,110 +858,66 @@ function updateTargetPrompt(){
 function doInteract(){if(currentAction)currentAction();}
 function tick(){
   if(!active){
-    if(st==="MENU"){
-      camera.rotation.order="YXZ";
-      camera.rotation.y=yaw+Math.sin(Date.now()*.00035)*.12;
-      camera.rotation.x=Math.sin(Date.now()*.00025)*.02;
-      renderer.render(scene,camera);
+    if(st === "MENU"){
+      camera.rotation.order = "YXZ";
+      camera.rotation.y = yaw + Math.sin(Date.now() * 0.00035) * 0.12;
+      camera.rotation.x = Math.sin(Date.now() * 0.00025) * 0.02;
+      renderer.render(scene, camera);
     }
     return;
   }
 
-  if(!padOpen){
-    let kx=0,ky=0;
-    if(keys.KeyW||keys.ArrowUp)ky-=1;
-    if(keys.KeyS||keys.ArrowDown)ky+=1;
-    if(keys.KeyA||keys.ArrowLeft)kx-=1;
-    if(keys.KeyD||keys.ArrowRight)kx+=1;
-    if(kx||ky){const l=Math.hypot(kx,ky);joyX=kx/l;joyY=ky/l;}
-    else if(!joyId){joyX=joyY=0;}
-  }
-
-  camera.rotation.order="YXZ";camera.rotation.y=yaw;camera.rotation.x=pitch;
-  cr+=((crouch?-.65:0)-cr)*.15;
-  currentAction=updateTargetPrompt();
-
-  const mv=!padOpen&&Math.hypot(joyX,joyY)>.08;
-  const rn=mv&&sprint&&!crouch;
-  const spd=(rn?.098:mv?.05:0)*(bst>0?1.35:1);
-
-  if(mv){
-    const f=-joyY*spd,s=joyX*spd;
-    const dx=-Math.sin(yaw)*f+Math.cos(yaw)*s;
-    const dz=-Math.cos(yaw)*f-Math.sin(yaw)*s;
-    if(!checkWallHit(rig.position.x+dx,rig.position.z,rig.position.y))rig.position.x+=dx;
-    if(!checkWallHit(rig.position.x,rig.position.z+dz,rig.position.y))rig.position.z+=dz;
-    stepTimer++;
-    if(stepTimer>=(rn?16:26)){stepTimer=0;playTone(110,55,.09,"triangle",rn?.08:.045);}
-  }
-
-  idlePhase+=.035;
-  sprintBlend+=((rn?1:0)-sprintBlend)*.12;
-  if(rn)sprintPhase+=.24;
-
-  const wL=Math.sin(sprintPhase),wR=Math.sin(sprintPhase+Math.PI);
-  sprintArmL.visible=sprintArmR.visible=sprintBlend>.02;
-  sprintArmL.position.y=-.58+sprintBlend*(.36+Math.max(0,wL)*.08);
-  sprintArmR.position.y=-.58+sprintBlend*(.36+Math.max(0,wR)*.08);
-  sprintArmL.position.z=-.36-sprintBlend*(.06+wL*.09);
-  sprintArmR.position.z=-.36-sprintBlend*(.06+wR*.09);
-  sprintArmL.rotation.x=sprintBlend*wL*.35;
-  sprintArmR.rotation.x=sprintBlend*wR*.35;
-
-  camera.position.y=cr+(1-sprintBlend)*Math.sin(idlePhase)*.015+sprintBlend*Math.abs(Math.sin(sprintPhase))*.045;
-  camera.rotation.z=(1-sprintBlend)*Math.cos(idlePhase*.7)*.006+sprintBlend*Math.sin(sprintPhase)*.018;
-
-  if(fr.visible){
-    fr.position.lerp(fr.userData.tp,.18);
-    fr.rotation.y+=(fr.userData.ty-fr.rotation.y)*.18;
-    if(fr.userData.wk){
-      fr.userData.wp+=.15;
-      const s=Math.sin(fr.userData.wp)*.4;
-      fr.userData.lL.rotation.x=s;
-      fr.userData.lR.rotation.x=-s;
+  try {
+    if(!padOpen){
+      let kx = 0, ky = 0;
+      if(keys.KeyW || keys.ArrowUp) ky -= 1;
+      if(keys.KeyS || keys.ArrowDown) ky += 1;
+      if(keys.KeyA || keys.ArrowLeft) kx -= 1;
+      if(keys.KeyD || keys.ArrowRight) kx += 1;
+      if(kx || ky){ const l = Math.hypot(kx, ky); joyX = kx / l; joyY = ky / l; }
+      else if(!joyId){ joyX = joyY = 0; }
     }
-  }
 
-  entityAudioTimer++;
-  if(st==="L0"){
-    if(!ld.pit){
-      for(let h of ld.pitHoles){
-        if(Math.hypot(rig.position.x-h.x,rig.position.z-h.z)<h.r){
-          ld.pit=true;rig.position.y=-2.35;ld.bac.visible=true;break;
+    camera.rotation.order = "YXZ";
+    camera.rotation.y = yaw;
+    camera.rotation.x = pitch;
+    cr += ((crouch ? -0.65 : 0) - cr) * 0.15;
+    currentAction = updateTargetPrompt();
+
+    const mv = !padOpen && Math.hypot(joyX, joyY) > 0.08;
+    const rn = mv && sprint && !crouch;
+    const spd = (rn ? 0.098 : mv ? 0.05 : 0) * (bst > 0 ? 1.35 : 1);
+
+    if(mv){
+      const f = -joyY * spd, s = joyX * spd;
+      const dx = -Math.sin(yaw) * f + Math.cos(yaw) * s;
+      const dz = -Math.cos(yaw) * f - Math.sin(yaw) * s;
+      if(!checkWallHit(rig.position.x + dx, rig.position.z, rig.position.y)) rig.position.x += dx;
+      if(!checkWallHit(rig.position.x, rig.position.z + dz, rig.position.y)) rig.position.z += dz;
+    }
+
+    if(st === "L0" && ld.pitHoles){
+      if(!ld.pit){
+        for(let h of ld.pitHoles){
+          if(Math.hypot(rig.position.x - h.x, rig.position.z - h.z) < h.r){
+            ld.pit = true; rig.position.y = -2.35; if(ld.bac) ld.bac.visible = true; break;
+          }
         }
       }
+      if(ld.pit && ld.bac){
+        const bx = rig.position.x - ld.bac.position.x, bz = rig.position.z - ld.bac.position.z, d = Math.hypot(bx, bz);
+        if(d > 0.4){ ld.bac.position.x += bx / d * 0.044; ld.bac.position.z += bz / d * 0.044; }
+        if(d < 0.8){ addChatMsg("Бактерия настигла вас!", "#ef4444"); lvl0(); }
+      }
     }
-    if(ld.pit){
-      const bx=rig.position.x-ld.bac.position.x,bz=rig.position.z-ld.bac.position.z,d=Math.hypot(bx,bz);
-      if(d>.4){ld.bac.position.x+=bx/d*.044;ld.bac.position.z+=bz/d*.044;}
-      if(entityAudioTimer%26===0)playTone(95,42,.25,"sawtooth",Math.min(.18,.45/Math.max(1,d)));
-      if(dplayTone(165,230,.28,"triangle",.035),260);
-  }
-  if(st==="L4"&&!ld.fin){
-    const on=Math.sin(Date.now()*.002)>-.2;
-    ld.cl.intensity=on?1.35:.04;
-    const inSafeRoom=Math.abs(rig.position.x)>6.2;
-    if(!on&&!inSafeRoom){
-      const sx=rig.position.x-ld.sm.position.x,sz=rig.position.z-ld.sm.position.z,sd=Math.hypot(sx,sz);
-      if(sd>.4){ld.sm.position.x+=sx/sd*.06;ld.sm.position.z+=sz/sd*.06;}
-      if(entityAudioTimer%22===0)playTone(880,1250,.18,"sine",Math.min(.14,.35/Math.max(1,sd)));
-      if(sd<.85){addChatMsg("Улыбашка поймала вас в темноте! Двери перемешаны заново","#ef4444");lvl4();}
-    }
+  } catch(err) {
+    console.error(err);
   }
 
-  if(bst>0)bst--;
-  if(st.startsWith("L"))san=Math.max(0,san-.006);
-  const rt=san/100,col=rt>.5?"#22c55e":rt>.25?"#eab308":"#ef4444";
-  document.getElementById("san-fill").style.height=Math.max(5,rt*100)+"%";
-  document.getElementById("san-fill").style.background=col;
-  document.getElementById("san-pct").style.color=col;
-  document.getElementById("san-pct").innerText=Math.ceil(san)+"%";
-  document.getElementById("vig").style.boxShadow=`inset 0 0 ${Math.floor((1-rt)*120)}px rgba(0,0,0,.95)`;
+  renderer.render(scene, camera);
+}
 
-  renderer.render(scene,camera);
-}
-}
-(function loop(){requestAnimationFrame(loop);tick();})();
+(function loop(){ requestAnimationFrame(loop); tick(); })();
 </script>
 </body>
 </html>
